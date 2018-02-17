@@ -1,10 +1,10 @@
 import logging
 import time
 
+start_time = time.time()
+
 import numpy as np
 import tensorflow as tf
-
-start_time = time.time()
 
 # set up logging
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
@@ -16,15 +16,14 @@ logger.addHandler(console_handler)
 console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
 
-matrix_one = [[1.0, 2.0], [3.0, 4.0]]
-logger.debug(type(matrix_one))
-tensor_one = tf.convert_to_tensor(matrix_one)
-logger.debug(type(tensor_one))
-
-matrix_two = np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32)
-logger.debug(type(matrix_two))
-tensor_two = tf.convert_to_tensor(matrix_two)
-logger.debug(type(tensor_two))
+for matrix in [
+    [[1.0, 2.0], [3.0, 4.0]],
+    np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32),
+    tf.constant([[1.0, 2.0], [3.0, 4.0]])
+]:
+    logger.debug('matrix type: %s' % type(matrix))
+    tensor = tf.convert_to_tensor(matrix)
+    logger.debug('tensor type: %s' % type(tensor))
 
 logger.debug('done')
 finish_time = time.time()
