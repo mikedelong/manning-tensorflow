@@ -24,7 +24,6 @@ for i in range(1, len(raw_data)):
     if raw_data[i] - raw_data[i - 1] > 5:
         updater = tf.assign(spike, True)
         updater.eval()
-        # tf.assign(spike, True).eval()
     else:
         tf.assign(spike, False).eval()
     logger.debug('spike: %s' % spike.eval())
