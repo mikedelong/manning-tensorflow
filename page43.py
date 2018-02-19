@@ -17,7 +17,6 @@ logger.debug('started')
 
 raw_data = [1.0, 2.0, 8.0, -1.0, 0.0, 5.5, 6.0, 13.0]
 
-# first version as written in book
 session = tf.InteractiveSession()
 spikes = tf.Variable([False] * len(raw_data), name='spikes')
 spikes.initializer.run()
@@ -30,7 +29,8 @@ for i in range(1, len(raw_data)):
         updater = tf.assign(spikes, spikes_val)
         updater.eval()
 
-save_path = saver.save(session, "spikes.ckpt")
+checkpoint_filename = './spikes.ckpt'
+save_path = saver.save(session, checkpoint_filename)
 logger.debug('spikes data saved to %s' % save_path)
 
 session.close()
