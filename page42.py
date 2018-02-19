@@ -56,6 +56,17 @@ for i in range(1, len(raw_data)):
     logger.debug('spike: %s' % spike.eval())
 session.close()
 
+# fourth version with no temporary
+session = tf.InteractiveSession()
+spike = tf.Variable(False)
+spike.initializer.run()
+
+for i in range(1, len(raw_data)):
+    tf.assign(spike, raw_data[i] - raw_data[i - 1] > 5).eval()
+    logger.debug('spike: %s' % spike.eval())
+session.close()
+
+
 logger.debug('done')
 finish_time = time.time()
 elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
