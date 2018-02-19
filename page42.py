@@ -16,6 +16,8 @@ console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
 
 raw_data = [1.0, 2.0, 8.0, -1.0, 0.0, 5.5, 6.0, 13.0]
+
+# first version as written in book
 session = tf.InteractiveSession()
 spike = tf.Variable(False)
 spike.initializer.run()
@@ -30,6 +32,7 @@ for i in range(1, len(raw_data)):
 
 session.close()
 
+# second version with no updater, code in line
 session = tf.InteractiveSession()
 spike = tf.Variable(False)
 spike.initializer.run()
@@ -39,6 +42,17 @@ for i in range(1, len(raw_data)):
         tf.assign(spike, True).eval()
     else:
         tf.assign(spike, False).eval()
+    logger.debug('spike: %s' % spike.eval())
+session.close()
+
+# third version with no conditional
+session = tf.InteractiveSession()
+spike = tf.Variable(False)
+spike.initializer.run()
+
+for i in range(1, len(raw_data)):
+    result = raw_data[i] - raw_data[i - 1] > 5
+    tf.assign(spike, result).eval()
     logger.debug('spike: %s' % spike.eval())
 session.close()
 
