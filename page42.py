@@ -15,8 +15,32 @@ logger.addHandler(console_handler)
 console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
 
+raw_data = [1.0, 2.0, 8.0, -1.0, 0.0, 5.5, 6.0, 13.0]
 session = tf.InteractiveSession()
+spike = tf.Variable(False)
+spike.initializer.run()
 
+for i in range(1, len(raw_data)):
+    if raw_data[i] - raw_data[i - 1] > 5:
+        updater = tf.assign(spike, True)
+        updater.eval()
+        # tf.assign(spike, True).eval()
+    else:
+        tf.assign(spike, False).eval()
+    logger.debug('spike: %s' % spike.eval())
+
+session.close()
+
+session = tf.InteractiveSession()
+spike = tf.Variable(False)
+spike.initializer.run()
+
+for i in range(1, len(raw_data)):
+    if raw_data[i] - raw_data[i - 1] > 5:
+        tf.assign(spike, True).eval()
+    else:
+        tf.assign(spike, False).eval()
+    logger.debug('spike: %s' % spike.eval())
 session.close()
 
 logger.debug('done')
