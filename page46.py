@@ -25,11 +25,11 @@ update_average = alpha * current_value + (1.0 - alpha) * previous_average
 initializer = tf.global_variables_initializer()
 with tf.Session() as session:
     session.run(initializer)
-    for i in range(len(raw_data)):
-        feed_dict = {current_value: raw_data[i]}
+    for value in raw_data:
+        feed_dict = {current_value: value}
         current_average = session.run(update_average, feed_dict=feed_dict)
         session.run(tf.assign(previous_average, current_average))
-        logger.debug('raw data: %.2f current average: %.2f' % (raw_data[i], current_average))
+        logger.debug('raw data: %.2f current average: %.2f' % (value, current_average))
 
 
 logger.debug('done')
