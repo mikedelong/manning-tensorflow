@@ -1,6 +1,8 @@
 import logging
 import time
 
+import numpy as np
+
 start_time = time.time()
 
 # set up logging
@@ -12,6 +14,8 @@ console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
+
+raw_data = np.random.normal(10, 1, 100)
 
 logger.debug('done')
 finish_time = time.time()
