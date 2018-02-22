@@ -20,9 +20,10 @@ random_seed = 2
 np.random.seed(seed=random_seed)
 raw_data = np.random.normal(10, 1, 100)
 alpha = tf.constant(0.05)
+beta = tf.Variable(1.0 - alpha)
 current_value = tf.placeholder(tf.float32)
 previous_average = tf.Variable(0.0)
-update_average = alpha * current_value + (1.0 - alpha) * previous_average
+update_average = alpha * current_value + tf.multiply(beta, previous_average)
 
 initializer = tf.global_variables_initializer()
 with tf.Session() as session:
