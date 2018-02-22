@@ -2,6 +2,7 @@ import logging
 import time
 
 import numpy as np
+import tensorflow as tf
 
 start_time = time.time()
 
@@ -16,6 +17,7 @@ console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
 
 raw_data = np.random.normal(10, 1, 100)
+alpha = tf.constant(0.05)
 
 logger.debug('done')
 finish_time = time.time()
