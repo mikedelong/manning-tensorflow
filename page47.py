@@ -36,8 +36,7 @@ initializer = tf.global_variables_initializer()
 with tf.Session() as session:
     session.run(initializer)
     writer.add_graph(session.graph)
-    for index in range(len(raw_data)):
-        value = raw_data[index]
+    for index, value in enumerate(raw_data):
         feed_dict = {current_value: value}
         summary_string, current_average = session.run([merged, update_average], feed_dict=feed_dict)
         session.run(tf.assign(previous_average, current_average))
