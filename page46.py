@@ -16,7 +16,7 @@ logger.addHandler(console_handler)
 console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
 
-random_seed = 2
+random_seed = 46
 np.random.seed(seed=random_seed)
 raw_data = np.random.normal(10, 1, 100)
 alpha = tf.constant(0.05)
