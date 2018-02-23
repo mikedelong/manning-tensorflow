@@ -25,14 +25,24 @@ current_value = tf.placeholder(tf.float32)
 previous_average = tf.Variable(0.0)
 update_average = alpha * current_value + tf.multiply(beta, previous_average)
 
+average_history = tf.summary.scalar('running average', update_average)
+value_history = tf.summary.scalar('incoming values', current_value)
+merged = tf.summary.merge_all()
+log_folder = './logs/'
+writer = tf.summary.FileWriter(log_folder)
+
 initializer = tf.global_variables_initializer()
+
 with tf.Session() as session:
     session.run(initializer)
-    for value in raw_data:
+    writer.add_graph(session.graph)
+    for index in range(len(raw_data)):
+        value = raw_data[index]
         feed_dict = {current_value: value}
-        current_average = session.run(update_average, feed_dict=feed_dict)
+        summary_string, current_average = session.run([merged, update_average], feed_dict=feed_dict)
         session.run(tf.assign(previous_average, current_average))
         logger.debug('raw data: %.2f current average: %.2f' % (value, current_average))
+        writer.add_summary(summary_string, index)
 
 logger.debug('done')
 finish_time = time.time()
