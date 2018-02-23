@@ -1,6 +1,9 @@
 import logging
 import time
 
+import numpy as np
+import tensorflow as tf
+
 start_time = time.time()
 
 # set up logging
@@ -12,6 +15,24 @@ console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
+
+random_seed = 47
+np.random.seed(seed=random_seed)
+raw_data = np.random.normal(10, 1, 100)
+alpha = tf.constant(0.05)
+beta = tf.Variable(1.0 - alpha)
+current_value = tf.placeholder(tf.float32)
+previous_average = tf.Variable(0.0)
+update_average = alpha * current_value + tf.multiply(beta, previous_average)
+
+initializer = tf.global_variables_initializer()
+with tf.Session() as session:
+    session.run(initializer)
+    for value in raw_data:
+        feed_dict = {current_value: value}
+        current_average = session.run(update_average, feed_dict=feed_dict)
+        session.run(tf.assign(previous_average, current_average))
+        logger.debug('raw data: %.2f current average: %.2f' % (value, current_average))
 
 logger.debug('done')
 finish_time = time.time()
