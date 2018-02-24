@@ -6,7 +6,6 @@ import numpy as np
 
 start_time = time.time()
 
-# set up logging
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
 logger = logging.getLogger('main')
 logger.setLevel(logging.DEBUG)
