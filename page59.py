@@ -1,6 +1,9 @@
 import logging
 import time
 
+import matplotlib.pyplot as plt
+import numpy as np
+
 start_time = time.time()
 
 # set up logging
@@ -12,6 +15,15 @@ console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
+
+random_seed = 1
+np.random.seed(random_seed)
+
+x_train = np.linspace(-1, 1, 101)
+y_train = 2 * x_train + np.random.randn(*x_train.shape) * 0.33
+plt.scatter(x_train, y_train)
+outfile = './page59.png'
+plt.savefig(outfile)
 
 logger.debug('done')
 finish_time = time.time()
