@@ -15,7 +15,7 @@ logger.addHandler(console_handler)
 console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
 
-random_seed = 1
+random_seed = 59
 np.random.seed(random_seed)
 
 x_train = np.linspace(-1, 1, 101)
