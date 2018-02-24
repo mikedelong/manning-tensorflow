@@ -32,6 +32,7 @@ Y = tf.placeholder(tf.float32)
 name = 'weights'
 w = tf.Variable(0.0, name=name)
 y_model = model(X, w)
+# https://github.com/BinRoot/TensorFlow-Book/blob/master/ch03_regression/Concept01_linear_regression.ipynb
 cost = tf.reduce_mean(tf.square(Y - y_model))
 train_op = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
 
