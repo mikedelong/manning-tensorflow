@@ -26,7 +26,7 @@ learning_rate = 0.01
 training_epochs = 100
 
 x_train = np.linspace(-1, 1, 101)
-y_train = 2 * x_train + np.random.randn(*x_train.shape) * 0.33
+y_train = 2 * x_train + np.random.randn((len(x_train, ))) * 0.33
 X = tf.placeholder(tf.float32)
 Y = tf.placeholder(tf.float32)
 name = 'weights'
@@ -34,7 +34,7 @@ w = tf.Variable(0.0, name=name)
 y_model = model(X, w)
 # https://github.com/BinRoot/TensorFlow-Book/blob/master/ch03_regression/Concept01_linear_regression.ipynb
 cost = tf.reduce_mean(tf.square(Y - y_model))
-train_op = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
+train_op = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
 
 session = tf.Session()
 initializer = tf.global_variables_initializer()
