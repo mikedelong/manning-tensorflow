@@ -21,7 +21,7 @@ np.random.seed(random_seed)
 x_train = np.linspace(-1, 1, 101)
 y_train = 2 * x_train + np.random.randn((len(x_train, ))) * 0.33
 plt.scatter(x_train, y_train)
-outfile = './page59.png'
+outfile = './output/page59.png'
 plt.savefig(outfile)
 
 logger.debug('done')
