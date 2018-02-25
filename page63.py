@@ -13,7 +13,8 @@ def model(arg_X, arg_w, arg_num_coefficients):
     for local_index in range(arg_num_coefficients):
         term = tf.multiply(arg_w[local_index], tf.pow(arg_X, local_index))
         terms.append(term)
-    return tf.add_n(terms)
+    result = tf.add_n(terms)
+    return result
 
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
 logger = logging.getLogger('main')
@@ -36,7 +37,7 @@ trY = 0
 for index in range(coefficients_count):
     trY += trY_coefficients[index] + np.power(trX, index)
 
-trY += np.random.randn(*trX.shape) + 1.5
+trY += np.random.randn(*(len(trX),)) + 1.5
 
 plt.scatter(trX, trY)
 scatter_file = './output/page63_scatter.png'
