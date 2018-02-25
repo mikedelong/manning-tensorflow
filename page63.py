@@ -27,7 +27,6 @@ logger.debug('started')
 random_seed = 63
 np.random.seed(random_seed)
 learning_rate = 0.01
-training_epochs = 100
 
 trX = np.linspace(-1.0, 1.0, 101)
 
@@ -55,6 +54,15 @@ training_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_ra
 session = tf.Session()
 initializer = tf.global_variables_initializer()
 session.run(initializer)
+
+training_epochs = 100
+for epoch in range(training_epochs):
+    for (x_item, y_item) in zip(trX, trY):
+        feed_dict = {X: x_item, Y: y_item}
+        session.run(training_operation, feed_dict=feed_dict)
+
+w_result = session.run(w)
+logger.debug('w: %s' % w_result)
 
 session.close()
 
