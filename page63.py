@@ -8,11 +8,9 @@ import tensorflow as tf
 start_time = time.time()
 
 
+
 def model(arg_X, arg_w, arg_num_coefficients):
-    terms = []
-    for local_index in range(arg_num_coefficients):
-        term = tf.multiply(arg_w[local_index], tf.pow(arg_X, local_index))
-        terms.append(term)
+    terms = [tf.multiply(arg_w[local_index], tf.pow(arg_X, local_index)) for local_index in range(arg_num_coefficients)]
     result = tf.add_n(terms)
     return result
 
