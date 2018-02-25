@@ -43,6 +43,11 @@ plt.scatter(trX, trY)
 scatter_file = './output/page63_scatter.png'
 plt.savefig(scatter_file)
 
+X = tf.placeholder(tf.float32)
+Y = tf.placeholder(tf.float32)
+
+
+
 logger.debug('done')
 finish_time = time.time()
 elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
