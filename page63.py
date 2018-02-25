@@ -8,10 +8,10 @@ import tensorflow as tf
 start_time = time.time()
 
 
-def model(X, w, arg_num_coefficients):
+def model(arg_X, arg_w, arg_num_coefficients):
     terms = []
     for local_index in range(arg_num_coefficients):
-        term = tf.multiply(w[local_index], tf.pow(X, local_index))
+        term = tf.multiply(arg_w[local_index], tf.pow(arg_X, local_index))
         terms.append(term)
     return tf.add_n(terms)
 
@@ -45,6 +45,12 @@ plt.savefig(scatter_file)
 
 X = tf.placeholder(tf.float32)
 Y = tf.placeholder(tf.float32)
+
+name = 'parameters'
+w = tf.Variable([0.0] * coefficients_count, name=name)
+y_model = model(X, w, coefficients_count)
+cost = tf.pow(Y - y_model, 2)
+training_operator = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
 
 
 
