@@ -25,8 +25,8 @@ np.random.seed(random_seed)
 learning_rate = 0.01
 training_epochs = 100
 
-x_train = np.linspace(-1, 1, 101)
-y_train = 2 * x_train + np.random.randn((len(x_train, ))) * 0.33
+x_train = np.linspace(-1.0, 1.0, 101)
+y_train = np.multiply(2.0, x_train) + np.random.randn((len(x_train, ))) * 0.33
 X = tf.placeholder(tf.float32)
 Y = tf.placeholder(tf.float32)
 name = 'weights'
@@ -47,10 +47,11 @@ for epoch in range(training_epochs):
 w_result = session.run(w)
 session.close()
 
-plt.scatter(x_train, y_train)
 y_learned = x_train * w_result
-plt.plot(x_train, y_learned, 'r')
 outfile = './page60.png'
+
+plt.scatter(x_train, y_train)
+plt.plot(x_train, y_learned, 'r')
 plt.savefig(outfile)
 
 logger.debug('done')
