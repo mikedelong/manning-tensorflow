@@ -65,6 +65,14 @@ w_result = session.run(w)
 logger.debug('w: %s' % w_result)
 
 session.close()
+plt.scatter(trX, trY)
+trace = 0
+for index in range(coefficients_count):
+    trace += w_result[index] * np.power(trX, index)
+plt.plot(trX, trace, 'r')
+
+result_file = './output/page63_result.png'
+plt.savefig(result_file)
 
 logger.debug('done')
 finish_time = time.time()
