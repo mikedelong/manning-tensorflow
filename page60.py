@@ -34,14 +34,15 @@ w = tf.Variable(0.0, name=name)
 y_model = model(X, w)
 # https://github.com/BinRoot/TensorFlow-Book/blob/master/ch03_regression/Concept01_linear_regression.ipynb
 cost = tf.reduce_mean(tf.square(Y - y_model))
-train_op = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
+train_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
 
 session = tf.Session()
 initializer = tf.global_variables_initializer()
 session.run(initializer)
 for epoch in range(training_epochs):
     for (x_item, y_item) in zip(x_train, y_train):
-        session.run(train_op, feed_dict={X: x_item, Y: y_item})
+        feed_dict = {X: x_item, Y: y_item}
+        session.run(train_operation, feed_dict=feed_dict)
 
 w_val = session.run(w)
 session.close()
