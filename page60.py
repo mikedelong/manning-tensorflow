@@ -44,11 +44,11 @@ for epoch in range(training_epochs):
         feed_dict = {X: x_item, Y: y_item}
         session.run(train_operation, feed_dict=feed_dict)
 
-w_val = session.run(w)
+w_result = session.run(w)
 session.close()
 
 plt.scatter(x_train, y_train)
-y_learned = x_train * w_val
+y_learned = x_train * w_result
 plt.plot(x_train, y_learned, 'r')
 outfile = './page60.png'
 plt.savefig(outfile)
