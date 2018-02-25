@@ -8,9 +8,6 @@ import tensorflow as tf
 start_time = time.time()
 
 
-def model(arg_x, arg_w):
-    return tf.multiply(arg_x, arg_w)
-
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
 logger = logging.getLogger('main')
 logger.setLevel(logging.DEBUG)
@@ -31,7 +28,7 @@ X = tf.placeholder(tf.float32)
 Y = tf.placeholder(tf.float32)
 name = 'weights'
 w = tf.Variable(0.0, name=name)
-y_model = model(X, w)
+y_model = tf.multiply(X, w)
 # https://github.com/BinRoot/TensorFlow-Book/blob/master/ch03_regression/Concept01_linear_regression.ipynb
 cost = tf.reduce_mean(tf.square(Y - y_model))
 train_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
