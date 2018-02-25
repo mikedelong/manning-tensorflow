@@ -45,7 +45,7 @@ w_result = session.run(w)
 session.close()
 
 y_learned = x_train * w_result
-outfile = './page60.png'
+outfile = './output/page60.png'
 
 plt.scatter(x_train, y_train)
 plt.plot(x_train, y_learned, 'r')
