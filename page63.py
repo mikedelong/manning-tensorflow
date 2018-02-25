@@ -50,9 +50,13 @@ name = 'parameters'
 w = tf.Variable([0.0] * coefficients_count, name=name)
 y_model = model(X, w, coefficients_count)
 cost = tf.pow(Y - y_model, 2)
-training_operator = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
+training_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
 
+session = tf.Session()
+initializer = tf.global_variables_initializer()
+session.run(initializer)
 
+session.close()
 
 logger.debug('done')
 finish_time = time.time()
