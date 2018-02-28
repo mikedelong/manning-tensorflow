@@ -21,6 +21,7 @@ def model(arg_X, arg_w):
     result = tf.add(tf.multiply(arg_w[1], tf.pow(arg_X, 1)), tf.multiply(arg_w[0], tf.pow(arg_X, 0)))
     return result
 
+
 random_seed = 81
 np.random.seed(random_seed)
 x_label0 = np.random.normal(5, 1, 10)
@@ -53,8 +54,8 @@ for epoch in range(training_epochs):
     current_cost = session.run(cost, feed_dict=feed_dict)
     if epoch % 100 == 0:
         logger.debug('epoch : %d, cost : %.4f' % (epoch, current_cost))
-w_val = session.run(w)
-logger.debug('learned parameters: %s' % w_val)
+w_result = session.run(w)
+logger.debug('learned parameters: %s' % w_result)
 logger.debug('accuracy: %.3f' % session.run(accuracy, feed_dict=feed_dict))
 session.close()
 
