@@ -35,6 +35,13 @@ training_epochs = 1000
 X = tf.placeholder("float")
 Y = tf.placeholder("float")
 
+name = 'parameters'
+w = tf.Variable([0.0, 0.0], name=name)
+y_model = model(X, w)
+cost = tf.reduce_sum(tf.square(Y - y_model))
+training_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
+
+
 logger.debug('done')
 finish_time = time.time()
 elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
