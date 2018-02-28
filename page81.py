@@ -55,7 +55,7 @@ for epoch in range(training_epochs):
         logger.debug('epoch : %d, cost : %.4f' % (epoch, current_cost))
 w_val = session.run(w)
 logger.debug('learned parameters: %s' % w_val)
-
+logger.debug('accuracy: %.3f' % session.run(accuracy, feed_dict=feed_dict))
 session.close()
 
 logger.debug('done')
