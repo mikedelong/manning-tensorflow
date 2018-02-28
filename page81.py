@@ -17,8 +17,9 @@ console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
 
 
-def model(arg_X, arg_w):
-    result = tf.add(tf.multiply(arg_w[1], tf.pow(arg_X, 1)), tf.multiply(arg_w[0], tf.pow(arg_X, 0)))
+def model(arg_x, arg_w):
+    result = tf.add(tf.multiply(tf.slice(arg_w, [1], [1]), tf.pow(arg_x, 1)),
+                    tf.multiply(tf.slice(arg_w, [0], [1]), tf.pow(arg_x, 0)))
     return result
 
 
