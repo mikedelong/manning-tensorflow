@@ -47,8 +47,8 @@ session = tf.Session()
 initializer = tf.global_variables_initializer()
 session.run(initializer)
 
+feed_dict = {X: xs, Y: labels}
 for epoch in range(training_epochs):
-    feed_dict = {X: xs, Y: labels}
     session.run(training_operation, feed_dict=feed_dict)
     current_cost = session.run(cost, feed_dict=feed_dict)
     if epoch % 100 == 0:
