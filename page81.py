@@ -16,6 +16,11 @@ logger.addHandler(console_handler)
 console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
 
+
+def model(arg_X, arg_w):
+    result = tf.add(tf.multiply(arg_w[1], tf.pow(arg_X, 1)), tf.multiply(arg_w[0], tf.pow(arg_X, 0)))
+    return result
+
 random_seed = 81
 np.random.seed(random_seed)
 x_label0 = np.random.normal(5, 1, 10)
