@@ -7,8 +7,9 @@ import tensorflow as tf
 start_time = time.time()
 
 
-def model(arg_X, arg_w, arg_num_coefficients):
-    terms = [tf.multiply(arg_w[local_index], tf.pow(arg_X, local_index)) for local_index in range(arg_num_coefficients)]
+def model(arg_x, arg_w, arg_num_coefficients):
+    terms = [tf.multiply(tf.slice(arg_w, [local_index], [1]), tf.pow(arg_x, local_index)) for local_index in
+             range(arg_num_coefficients)]
     result = tf.add_n(terms)
     return result
 
@@ -17,11 +18,11 @@ def split_dataset(arg_x, arg_y, arg_ratio):
     array = np.arange(x_dataset.size)
     np.random.shuffle(array)
     train_size = int(arg_ratio * arg_x.size)
-    x_train = arg_x[array[0:train_size]]
-    x_test = arg_x[array[train_size:arg_x.size]]
-    y_train = arg_y[array[0:train_size]]
-    y_test = arg_y[array[train_size:arg_x.size]]
-    return x_train, x_test, y_train, y_test
+    x_train_result = arg_x[array[0:train_size]]
+    x_test_result = arg_x[array[train_size:arg_x.size]]
+    y_train_result = arg_y[array[0:train_size]]
+    y_test_result = arg_y[array[train_size:arg_x.size]]
+    return x_train_result, x_test_result, y_train_result, y_test_result
 
 
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
