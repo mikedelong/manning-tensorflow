@@ -40,6 +40,8 @@ w = tf.Variable([0.0, 0.0], name=name)
 y_model = model(X, w)
 cost = tf.reduce_sum(tf.square(Y - y_model))
 training_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
+correct_prediction = tf.equal(Y, tf.to_float(tf.greater(y_model, 0.5)))
+accuracy = tf.reduce_mean(tf.to_float(correct_prediction))
 
 session = tf.Session()
 initializer = tf.global_variables_initializer()
@@ -47,11 +49,12 @@ session.run(initializer)
 
 for epoch in range(training_epochs):
     feed_dict = {X: xs, Y: labels}
-    current_cost = session.run(training_operation, feed_dict=feed_dict)
+    session.run(training_operation, feed_dict=feed_dict)
+    current_cost = session.run(cost, feed_dict=feed_dict)
     if epoch % 100 == 0:
-        logger.debug('epoch : %d, cost : %.3f' % (epoch, current_cost))
+        logger.debug('epoch : %d, cost : %.4f' % (epoch, current_cost))
 w_val = session.run(w)
-logger.debug('learned parameters: %.3f' % w_val)
+logger.debug('learned parameters: %s' % w_val)
 
 session.close()
 
