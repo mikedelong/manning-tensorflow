@@ -41,6 +41,19 @@ y_model = model(X, w)
 cost = tf.reduce_sum(tf.square(Y - y_model))
 training_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
 
+session = tf.Session()
+initializer = tf.global_variables_initializer()
+session.run(initializer)
+
+for epoch in range(training_epochs):
+    feed_dict = {X: xs, Y: labels}
+    current_cost = session.run(training_operation, feed_dict=feed_dict)
+    if epoch % 100 == 0:
+        logger.debug('epoch : %d, cost : %.3f' % (epoch, current_cost))
+w_val = session.run(w)
+logger.debug('learned parameters: %.3f' % w_val)
+
+session.close()
 
 logger.debug('done')
 finish_time = time.time()
