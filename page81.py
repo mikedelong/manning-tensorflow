@@ -30,6 +30,8 @@ x_label1 = np.random.normal(2, 1, 10)
 xs = np.append(x_label0, x_label1)
 labels = [0.0] * len(x_label0) + [1.0] * len(x_label1)
 plt.scatter(xs, labels)
+scatter_file = './output/page81_scatter.png'
+plt.savefig(scatter_file)
 
 learning_rate = 0.001
 training_epochs = 1000
