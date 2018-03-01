@@ -60,6 +60,11 @@ logger.debug('learned parameters: %s' % w_result)
 logger.debug('accuracy: %.3f' % session.run(accuracy, feed_dict=feed_dict))
 session.close()
 
+all_xs = np.linspace(0, 10, 100)
+plt.plot(all_xs, all_xs * w_result[1] + w_result[0])
+output_file = './output/page81.png'
+plt.savefig(output_file)
+
 logger.debug('done')
 finish_time = time.time()
 elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
