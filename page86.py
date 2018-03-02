@@ -1,7 +1,15 @@
 import logging
 import time
 
+import numpy as np
+
 start_time = time.time()
+
+
+def sigmoid(arg_x):
+    result = 1.0 / (1.0 + np.exp(-arg_x))
+    return result
+
 
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
 logger = logging.getLogger('main')
