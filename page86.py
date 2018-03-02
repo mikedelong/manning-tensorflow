@@ -3,6 +3,7 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+import tensorflow as tf
 
 start_time = time.time()
 
@@ -29,6 +30,35 @@ ys = np.asarray([0.0] * len(x1) + [1.0] * len(x2))
 plt.scatter(xs, ys)
 scatter_file = './output/page86_scatter.png'
 plt.savefig(scatter_file)
+
+shape = (None,)
+X = tf.placeholder(tf.float32, shape=shape, name='x')
+Y = tf.placeholder(tf.float32, shape=shape, name='y')
+w = tf.Variable([0.0, 0.0], name='parameter', trainable=True)
+y_model = tf.sigmoid(tf.slice(w, [1], [1]) * X + tf.slice(w, [0], [1]))
+cost = tf.reduce_mean(-Y * tf.log(y_model) - (1 - Y) * tf.log(1 - y_model))
+learning_rate = 0.01
+training_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
+
+epoch_count = 1000
+tolerance = 0.0001
+with tf.Session() as session:
+    session.run(tf.global_variables_initializer())
+    previous_error = 0
+    feed_dict = {X: xs, Y: ys}
+    for epoch in range(epoch_count):
+        error, _ = session.run([cost, training_operation], feed_dict=feed_dict)
+        logger.debug('epoch: %d error: %.4f' % (epoch, error))
+        if abs(previous_error - error) < tolerance:
+            break
+        previous_error = error
+    w_result = session.run(w, feed_dict=feed_dict)
+
+all_xs = np.linspace(-10, 10, 100)
+plt.plot(all_xs, sigmoid((all_xs * w_result[1] + w_result[0])))
+result_file = './output/page86_result.png'
+plt.savefig(result_file)
+
 
 logger.debug('done')
 finish_time = time.time()
