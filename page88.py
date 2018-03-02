@@ -60,6 +60,16 @@ with tf.Session() as session:
         previous_error = error
     w_result = session.run(w, feed_dict=feed_dict)
 
+x1_boundary = []
+x2_boundary = []
+boundary_tolerance = 0.01
+for x1_test in np.linspace(0, 10, 100):
+    for x2_test in np.linspace(0, 10, 100):
+        z = sigmoid(-x2_test * w_result[2] - x1_test * w_result[1] - w_result[0])
+        if abs(z - 0.5) < boundary_tolerance:
+            x1_boundary.append(x1_test)
+            x2_boundary.append(x2_test)
+
 
 logger.debug('done')
 finish_time = time.time()
