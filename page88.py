@@ -1,6 +1,7 @@
 import logging
 import time
 
+import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 
@@ -70,6 +71,11 @@ for x1_test in np.linspace(0, 10, 100):
             x1_boundary.append(x1_test)
             x2_boundary.append(x2_test)
 
+plt.scatter(x1_boundary, x2_boundary, c='b', marker='o', s=20)
+plt.scatter(x1_label1, x2_label1, c='r', marker='x', s=20)
+plt.scatter(x1_label2, x2_label2, c='g', marker='1', s=20)
+output_file = './output/page88.png'
+plt.savefig(output_file)
 
 logger.debug('done')
 finish_time = time.time()
