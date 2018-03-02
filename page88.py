@@ -2,6 +2,7 @@ import logging
 import time
 
 import numpy as np
+import tensorflow as tf
 
 start_time = time.time()
 
@@ -22,8 +23,6 @@ logger.debug('started')
 
 random_seed = 88
 np.random.seed(random_seed)
-learning_rate = 0.1
-epoch_count = 2000
 
 x1_label1 = np.random.normal(3, 1, 1000)
 x2_label1 = np.random.normal(2, 1, 1000)
@@ -36,6 +35,14 @@ x2s = np.append(x2_label1, x2_label2)
 logger.debug('we have %d x2s' % x2s.size)
 ys = np.asarray([0.0] * x1_label1.size + [1.0] * x1_label2.size)
 logger.debug('we have %d ys' % ys.size)
+
+X1 = tf.placeholder(tf.float32, shape=(None,), name='x1')
+X2 = tf.placeholder(tf.float32, shape=(None,), name='x2')
+Y = tf.placeholder(tf.float32, shape=(None,), name='y')
+w = tf.Variable([0.0, 0.0, 0.0], name='w', trainable=True)
+
+learning_rate = 0.1
+epoch_count = 2000
 
 logger.debug('done')
 finish_time = time.time()
