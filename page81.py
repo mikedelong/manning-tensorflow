@@ -30,6 +30,8 @@ x_label1 = np.random.normal(2, 1, 10)
 xs = np.append(x_label0, x_label1)
 labels = [0.0] * len(x_label0) + [1.0] * len(x_label1)
 plt.scatter(xs, labels)
+scatter_file = './output/page81_scatter.png'
+plt.savefig(scatter_file)
 
 learning_rate = 0.001
 training_epochs = 1000
@@ -59,6 +61,11 @@ w_result = session.run(w)
 logger.debug('learned parameters: %s' % w_result)
 logger.debug('accuracy: %.3f' % session.run(accuracy, feed_dict=feed_dict))
 session.close()
+
+all_xs = np.linspace(0, 10, 100)
+plt.plot(all_xs, all_xs * w_result[1] + w_result[0])
+output_file = './output/page81.png'
+plt.savefig(output_file)
 
 logger.debug('done')
 finish_time = time.time()
