@@ -41,7 +41,11 @@ X2 = tf.placeholder(tf.float32, shape=(None,), name='x2')
 Y = tf.placeholder(tf.float32, shape=(None,), name='y')
 w = tf.Variable([0.0, 0.0, 0.0], name='w', trainable=True)
 
+y_model = tf.sigmoid(tf.slice(w, [2], [1]) * X2 + tf.slice(w, [1], [0]) * X1 + tf.slice(w, [0], [1]))
+cost = tf.reduce_mean(-tf.log(y_model * Y + (1.0 - y_model) * (1.0 - Y)))
 learning_rate = 0.1
+training_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
+
 epoch_count = 2000
 
 logger.debug('done')
