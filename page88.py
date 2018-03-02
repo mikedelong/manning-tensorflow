@@ -41,12 +41,25 @@ X2 = tf.placeholder(tf.float32, shape=(None,), name='x2')
 Y = tf.placeholder(tf.float32, shape=(None,), name='y')
 w = tf.Variable([0.0, 0.0, 0.0], name='w', trainable=True)
 
-y_model = tf.sigmoid(tf.slice(w, [2], [1]) * X2 + tf.slice(w, [1], [0]) * X1 + tf.slice(w, [0], [1]))
+y_model = tf.sigmoid(tf.slice(w, [2], [1]) * X2 + tf.slice(w, [1], [1]) * X1 + tf.slice(w, [0], [1]))
 cost = tf.reduce_mean(-tf.log(y_model * Y + (1.0 - y_model) * (1.0 - Y)))
 learning_rate = 0.1
 training_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
 
 epoch_count = 2000
+tolerance = 0.0001
+with tf.Session() as session:
+    session.run(tf.global_variables_initializer())
+    previous_error = 0.0
+    feed_dict = {X1: x1s, X2: x2s, Y: ys}
+    for epoch in range(epoch_count):
+        error, _ = session.run([cost, training_operation], feed_dict=feed_dict)
+        logger.debug('epoch: %d error: %.4f' % (epoch, error))
+        if abs(previous_error - error) < tolerance:
+            break
+        previous_error = error
+    w_result = session.run(w, feed_dict=feed_dict)
+
 
 logger.debug('done')
 finish_time = time.time()
