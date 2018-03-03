@@ -3,6 +3,7 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+import tensorflow as tf
 
 start_time = time.time()
 
@@ -58,6 +59,24 @@ test_labels = np.matrix(
     [[1.0, 0.0, 0.0]] * 10 + [[0.0, 1.0, 0.0]] * 10 + [[0.0, 0.0, 1.0]] * 10)
 
 train_size, feature_count = xs.shape
+
+epoch_count = 1000
+label_count = 3
+batch_size = 100
+
+X = tf.placeholder("float", shape=[None, feature_count])
+Y = tf.placeholder("float", shape=[None, label_count])
+W = tf.Variable(tf.zeros([feature_count, label_count]))
+b = tf.Variable(tf.zeros([label_count]))
+y_model = tf.nn.softmax(tf.matmul(X, W) + b)
+
+cost = -tf.reduce_sum(Y * tf.log(y_model))
+learning_rate = 0.01
+training_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
+
+correct_prediction = tf.equal(tf.argmax(y_model, 1), tf.argmax(Y, 1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, 'float'))
+
 
 logger.debug('done')
 finish_time = time.time()
