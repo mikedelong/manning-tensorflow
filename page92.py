@@ -1,6 +1,9 @@
 import logging
 import time
 
+import matplotlib.pyplot as plt
+import numpy as np
+
 start_time = time.time()
 
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
@@ -11,6 +14,21 @@ console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
+
+random_seed = 92
+np.random.seed(random_seed)
+x1_label0 = np.random.normal(1, 1, (100, 1))
+x2_label0 = np.random.normal(1, 1, (100, 1))
+x1_label1 = np.random.normal(5, 1, (100, 1))
+x2_label1 = np.random.normal(4, 1, (100, 1))
+x1_label2 = np.random.normal(8, 1, (100, 1))
+x2_label2 = np.random.normal(0, 1, (100, 1))
+
+plt.scatter(x1_label0, x2_label0, c='r', marker='o', s=60)
+plt.scatter(x1_label1, x2_label1, c='g', marker='x', s=60)
+plt.scatter(x1_label2, x2_label2, c='b', marker='_', s=60)
+output_file = './output/scatter92.png'
+plt.savefig(output_file)
 
 logger.debug('done')
 finish_time = time.time()
