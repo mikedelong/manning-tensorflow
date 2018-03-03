@@ -43,6 +43,22 @@ np.random.shuffle(arrangement)
 xs = xs[arrangement, :]
 labels = labels[arrangement, :]
 
+test_x1_label0 = np.random.normal(1, 1, (10, 1))
+test_x2_label0 = np.random.normal(1, 1, (10, 1))
+test_x1_label1 = np.random.normal(5, 1, (10, 1))
+test_x2_label1 = np.random.normal(4, 1, (10, 1))
+test_x1_label2 = np.random.normal(8, 1, (10, 1))
+test_x2_label2 = np.random.normal(0, 1, (10, 1))
+test_xs_label0 = np.hstack((test_x1_label0, test_x2_label0))
+test_xs_label1 = np.hstack((test_x1_label1, test_x2_label1))
+test_xs_label2 = np.hstack((test_x1_label2, test_x2_label2))
+
+test_xs = np.vstack((test_xs_label0, test_xs_label1, test_xs_label2))
+test_labels = np.matrix(
+    [[1.0, 0.0, 0.0]] * 10 + [[0.0, 1.0, 0.0]] * 10 + [[0.0, 0.0, 1.0]] * 10)
+
+train_size, feature_count = xs.shape
+
 logger.debug('done')
 finish_time = time.time()
 elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
