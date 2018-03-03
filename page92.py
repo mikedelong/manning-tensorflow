@@ -79,21 +79,15 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, 'float'))
 
 with tf.Session() as session:
     tf.global_variables_initializer().run()
-
     for step in range(epoch_count * train_size // batch_size):
         offset = (step * batch_size) % train_size
-        batch_xs = xs[offset: (offset + batch_size), :]
-        batch_labels = labels[offset: (offset + batch_size)]
-        feed_dict = {X: batch_xs, Y: batch_labels}
+        feed_dict = {X: xs[offset: (offset + batch_size), :], Y: labels[offset: (offset + batch_size)]}
         error, _ = session.run([cost, training_operation], feed_dict=feed_dict)
         logger.debug('at step %d error is %.4f' % (step, error))
 
-    w_result = session.run(W)
-    logger.debug('w: %s' % w_result)
-    b_result = session.run(b)
-    logger.debug('b: %s' % b_result)
+    logger.debug('w: %s' % session.run(W))
+    logger.debug('b: %s' % session.run(b))
     logger.debug('accuracy: %.4f' % accuracy.eval(feed_dict={X: test_xs, Y: test_labels}))
-
 
 logger.debug('done')
 finish_time = time.time()
