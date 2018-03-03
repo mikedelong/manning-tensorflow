@@ -77,6 +77,23 @@ training_operation = tf.train.GradientDescentOptimizer(learning_rate=learning_ra
 correct_prediction = tf.equal(tf.argmax(y_model, 1), tf.argmax(Y, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, 'float'))
 
+with tf.Session() as session:
+    tf.global_variables_initializer().run()
+
+    for step in range(epoch_count * train_size // batch_size):
+        offset = (step * batch_size) % train_size
+        batch_xs = xs[offset: (offset + batch_size), :]
+        batch_labels = labels[offset: (offset + batch_size)]
+        feed_dict = {X: batch_xs, Y: batch_labels}
+        error, _ = session.run([cost, training_operation], feed_dict=feed_dict)
+        logger.debug('at step %d error is %.4f' % (step, error))
+
+    w_result = session.run(W)
+    logger.debug('w: %s' % w_result)
+    b_result = session.run(b)
+    logger.debug('b: %s' % b_result)
+    logger.debug('accuracy: %.4f' % accuracy.eval(feed_dict={X: test_xs, Y: test_labels}))
+
 
 logger.debug('done')
 finish_time = time.time()
