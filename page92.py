@@ -30,6 +30,12 @@ plt.scatter(x1_label2, x2_label2, c='b', marker='_', s=60)
 output_file = './output/scatter92.png'
 plt.savefig(output_file)
 
+xs_label0 = np.hstack((x1_label0, x2_label0))
+xs_label1 = np.hstack((x1_label1, x2_label1))
+xs_label2 = np.hstack((x1_label2, x2_label2))
+xs = np.vstack((xs_label0, xs_label1, xs_label2))
+
+
 logger.debug('done')
 finish_time = time.time()
 elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
