@@ -35,6 +35,8 @@ xs_label1 = np.hstack((x1_label1, x2_label1))
 xs_label2 = np.hstack((x1_label2, x2_label2))
 xs = np.vstack((xs_label0, xs_label1, xs_label2))
 
+labels = np.matrix(
+    [[1.0, 0.0, 0.0]] * len(x1_label0) + [[0.0, 1.0, 0.0]] * len(x1_label1) + [[0.0, 0.0, 1.0]] * len(x1_label2))
 
 logger.debug('done')
 finish_time = time.time()
