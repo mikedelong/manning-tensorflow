@@ -7,8 +7,9 @@ import tensorflow as tf
 start_time = time.time()
 
 
-def get_chromogram(arg_audio_file):
-    result = bregman.suite.Chromagram(arg_audio_file, nfft=16384, wfft=8192, nhop=2205)
+def get_next_chromagram(arg_session, arg_filename):
+    local_audio_file = arg_session.run(arg_filename)
+    result = bregman.suite.Chromagram(local_audio_file, nfft=16384, wfft=8192, nhop=2205)
     return result.X
 
 
@@ -26,6 +27,9 @@ filename_count = tf.size(filenames)
 filename_queue = tf.train.string_input_producer(filenames)
 reader = tf.WholeFileReader()
 file_name, file_contents = reader.read(filename_queue)
+
+chroma = tf.placeholder(tf.float32)
+max_frequencies = tf.argmax(chroma, 0)
 
 with tf.Session() as session:
     session.run(tf.global_variables_initializer())
