@@ -2,6 +2,7 @@ import logging
 import time
 
 import bregman
+import numpy as np
 import tensorflow as tf
 
 start_time = time.time()
@@ -12,6 +13,13 @@ def get_next_chromagram(arg_session, arg_filename):
     result = bregman.suite.Chromagram(local_audio_file, nfft=16384, wfft=8192, nhop=2205)
     return result.X
 
+
+def extract_feature_vector(arg_session, arg_chroma_data, arg_max_frequencies):
+    feature_count, sample_count = np.shape(arg_chroma_data)
+    frequency_values = arg_session.run(arg_max_frequencies, feed_dict={chroma: arg_chroma_data})
+    histogram, _ = np.histogram(frequency_values, bins=range(feature_count + 1))
+    result = histogram.astype(float) / sample_count
+    return result
 
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
 logger = logging.getLogger('main')
