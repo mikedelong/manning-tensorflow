@@ -88,11 +88,14 @@ colors = np.array(
     [[0.0, 0.0, 1.0], [0.0, 0.0, 0.95], [0.0, 0.05, 1.0], [0.0, 1.0, 0.0], [0.0, 0.95, 0.0], [0.0, 1.0, 0.05],
      [1.0, 0.0, 0.0], [1.0, 0.05, 0.0], [1.0, 0.0, 0.05], [1.0, 1.0, 0.0]])
 
-som = SOM(4, 4, 3)
-som.train(colors)
-plt.imshow(som.centroid_grid)
-output_file = './output/page113.png'
-plt.savefig(output_file)
+for width in range(4, 44, 4):
+    for height in range(4, 44, 4):
+        model = SOM(width=width, height=height, dim=3)
+        model.train(colors)
+        plt.imshow(model.centroid_grid)
+        output_file = './output/page113-w-' + str(width) + '-h-' + str(height) + '.png'
+        logger.debug('writing case w: %d l: %d to %s' % (width, height, output_file))
+        plt.savefig(output_file)
 
 logger.debug('done')
 finish_time = time.time()
