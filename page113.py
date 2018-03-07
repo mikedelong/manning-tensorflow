@@ -34,6 +34,10 @@ class SOM:
         bmu_loc = self.get_bmu_loc(x)
         self.propagate_nodes = self.get_propagation(bmu_loc, x, _iter)
 
+        self.nodes_val = None
+        self.locs_val = None
+        self.centroid_grid = None
+
     def get_propagation(self, bmu_loc, x, arg_iter):
         num_nodes = self.width * self.height
         rate = 1.0 - tf.div(arg_iter, self.num_iters)
