@@ -34,9 +34,9 @@ class SOM:
         bmu_loc = self.get_bmu_loc(x)
         self.propagate_nodes = self.get_propagation(bmu_loc, x, _iter)
 
-    def get_propagation(self, bmu_loc, x, iter):
+    def get_propagation(self, bmu_loc, x, arg_iter):
         num_nodes = self.width * self.height
-        rate = 1.0 - tf.div(iter, self.num_iters)
+        rate = 1.0 - tf.div(arg_iter, self.num_iters)
         alpha = 0.5 * rate
         sigma = rate * tf.to_float(tf.maximum(self.width, self.height)) / 2.0
         expanded_bmu_loc = tf.expand_dims(tf.to_float(bmu_loc), 0.0)
@@ -44,7 +44,7 @@ class SOM:
         neigh_factor = tf.exp(-tf.div(sqr_dists_from_bmu, 2 * tf.square(sigma)))
         rate = tf.multiply(alpha, neigh_factor)
         rate_factor = tf.stack([tf.tile(tf.slice(rate, [i], [1]), [self.dim]) for i in range(num_nodes)])
-        nodes_diff = tf.multiply(rate_factor, tf.subtract(tf.stack([x for i in range(num_nodes)]), self.nodes))
+        nodes_diff = tf.multiply(rate_factor, tf.subtract(tf.stack([x for _ in range(num_nodes)]), self.nodes))
         update_nodes = tf.add(self.nodes, nodes_diff)
         result = tf.assign(self.nodes, update_nodes)
         return result
@@ -56,6 +56,24 @@ class SOM:
         bmu_idx = tf.argmin(dists, 0)
         result = tf.stack([tf.mod(bmu_idx, self.width), tf.div(bmu_idx, self.width)])
         return result
+
+    def get_locs(self):
+        locs = [(x, y) for y in range(self.height) for x in range(self.width)]
+        result = tf.to_float(locs)
+        return result
+
+    def train(self, data):
+        with tf.Session() as session:
+            session.run(tf.global_variables_initializer())
+            for index in range(self.num_iters):
+                for data_x in data:
+                    session.run(self.propagate_nodes, feed_dict={self.x: data_x, self.iter: index})
+            centroid_grid = [[] for _ in range(self.width)]
+            self.nodes_val = list(session.run(self.nodes))
+            self.locs_val = list(session.run(self.node_locs))
+            for index, loc in enumerate(self.locs_val):
+                centroid_grid[int(loc[0])].append(self.nodes_val[index])
+            self.centroid_grid = centroid_grid
 
 
 random_seed = 113
