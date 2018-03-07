@@ -1,6 +1,7 @@
 import logging
 import time
 
+import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 
@@ -43,7 +44,7 @@ class SOM:
         rate = 1.0 - tf.div(arg_iter, self.num_iters)
         alpha = 0.5 * rate
         sigma = rate * tf.to_float(tf.maximum(self.width, self.height)) / 2.0
-        expanded_bmu_loc = tf.expand_dims(tf.to_float(bmu_loc), 0.0)
+        expanded_bmu_loc = tf.expand_dims(tf.to_float(bmu_loc), 0)
         sqr_dists_from_bmu = tf.reduce_sum(tf.square(tf.subtract(expanded_bmu_loc, self.node_locs)), 1)
         neigh_factor = tf.exp(-tf.div(sqr_dists_from_bmu, 2 * tf.square(sigma)))
         rate = tf.multiply(alpha, neigh_factor)
@@ -83,6 +84,15 @@ class SOM:
 random_seed = 113
 np.random.seed(random_seed)
 tf.set_random_seed(random_seed)
+colors = np.array(
+    [[0.0, 0.0, 1.0], [0.0, 0.0, 0.95], [0.0, 0.05, 1.0], [0.0, 1.0, 0.0], [0.0, 0.95, 0.0], [0.0, 1.0, 0.05],
+     [1.0, 0.0, 0.0], [1.0, 0.05, 0.0], [1.0, 0.0, 0.05], [1.0, 1.0, 0.0]])
+
+som = SOM(4, 4, 3)
+som.train(colors)
+plt.imshow(som.centroid_grid)
+output_file = './output/page113.png'
+plt.savefig(output_file)
 
 logger.debug('done')
 finish_time = time.time()
