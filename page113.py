@@ -18,17 +18,17 @@ logger.debug('started')
 
 
 class SOM:
-    def __init__(self, width, height, dim):
+    def __init__(self, arg_width, arg_height, arg_dimensions):
         self.num_iters = 100
-        self.width = width
-        self.height = height
-        self.dim = dim
+        self.width = arg_width
+        self.height = arg_height
+        self.dim = arg_dimensions
         self.node_locs = self.get_locs()
 
-        nodes = tf.Variable(tf.random_normal([width * height, dim]))
+        nodes = tf.Variable(tf.random_normal([arg_width * arg_height, arg_dimensions]))
         self.nodes = nodes
 
-        x = tf.placeholder(tf.float32, [dim])
+        x = tf.placeholder(tf.float32, [arg_dimensions])
         _iter = tf.placeholder(tf.float32)
         self.x = x
         self.iter = _iter
@@ -90,7 +90,7 @@ colors = np.array(
 
 for width in range(4, 44, 4):
     for height in range(4, 44, 4):
-        model = SOM(width=width, height=height, dim=3)
+        model = SOM(arg_width=width, arg_height=height, arg_dimensions=3)
         model.train(colors)
         plt.imshow(model.centroid_grid)
         output_file = './output/page113-w-' + str(width) + '-h-' + str(height) + '.png'
