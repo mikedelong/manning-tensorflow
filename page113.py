@@ -28,11 +28,11 @@ class SOM:
         self.nodes = nodes
 
         x = tf.placeholder(tf.float32, [dim])
-        iter = tf.placeholder(tf.float32)
+        _iter = tf.placeholder(tf.float32)
         self.x = x
-        self.iter = iter
+        self.iter = _iter
         bmu_loc = self.get_bmu_loc(x)
-        self.propagate_nodes = self.get_propagation(bmu_loc, x, iter)
+        self.propagate_nodes = self.get_propagation(bmu_loc, x, _iter)
 
     def get_propagation(self, bmu_loc, x, iter):
         num_nodes = self.width * self.height
@@ -47,6 +47,14 @@ class SOM:
         nodes_diff = tf.multiply(rate_factor, tf.subtract(tf.stack([x for i in range(num_nodes)]), self.nodes))
         update_nodes = tf.add(self.nodes, nodes_diff)
         result = tf.assign(self.nodes, update_nodes)
+        return result
+
+    def get_bmu_loc(self, x):
+        expanded_x = tf.expand_dims(x, 0)
+        sqr_diff = tf.square(tf.subtract(expanded_x, self.nodes))
+        dists = tf.reduce_sum(sqr_diff, 1)
+        bmu_idx = tf.argmin(dists, 0)
+        result = tf.stack([tf.mod(bmu_idx, self.width), tf.div(bmu_idx, self.width)])
         return result
 
 
