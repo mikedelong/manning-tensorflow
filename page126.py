@@ -21,6 +21,12 @@ class HMM(object):
         self.obs_idx = tf.placeholder(tf.int32)
         self.fwd = tf.placeholder(tf.float64)
 
+    def get_emission(self, obs_idx):
+        slice_location = [0, obs_idx]
+        num_rows = tf.shape(self.emission)[0]
+        slice_shape = [num_rows, 1]
+        result = tf.slice(self.emission, slice_location, slice_shape)
+        return result
 
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
 logger = logging.getLogger('main')
