@@ -28,6 +28,11 @@ class HMM(object):
         result = tf.slice(self.emission, slice_location, slice_shape)
         return result
 
+    def forward_init_op(self):
+        obs_prob = self.get_emission(self.obs_idx)
+        result = tf.multiply(self.initial_prob, obs_prob)
+        return result
+
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
 logger = logging.getLogger('main')
 logger.setLevel(logging.DEBUG)
