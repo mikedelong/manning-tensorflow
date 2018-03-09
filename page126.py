@@ -14,6 +14,14 @@ class HMM(object):
         self.trans_prob = trans_prob
         self.emission = tf.constant(obs_prob)
 
+        assert self.initial_prob.shape == (self.N, 1)
+        assert self.trans_prob.shape == (self.N, self.N)
+        assert obs_prob.shape[0] == self.N
+
+        self.obs_idx = tf.placeholder(tf.int32)
+        self.fwd = tf.placeholder(tf.float64)
+
+
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
 logger = logging.getLogger('main')
 logger.setLevel(logging.DEBUG)
