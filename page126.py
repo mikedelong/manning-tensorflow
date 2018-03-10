@@ -54,6 +54,19 @@ class HMM(object):
         result = tf.argmax(weighted_back_transitions, 0)
         return result
 
+    def viterbi_decode(self, session, model, observations):
+        viterbi = session.run(model.forward_init_op(), feed_dict={model.obs: observations[0]})
+        backpts = np.ones((model.N, len(observations)), 'int32') * -1.0
+        for t in range(1, len(observations)):
+            viterbi, backpts = session.run([model.decode_op(), model.backopt_op()],
+                                           feed_dict={model.obs: observations[t], model.viterbi: viterbi})
+            backpts[:, t] = backpts
+        tokens = [viterbi[:, -1].argmax()]
+        for i in range(len(observations) - 1, 0, -1):
+            tokens.append(backpts[[-1], i])
+        result = tokens[::-1]
+        return result
+
 
 def forward_algorithm(session, model, observations):
     fwd = session.run(model.forward_init_op(), feed_dict={model.obs_idx: observations[0]})
