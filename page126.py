@@ -34,6 +34,13 @@ class HMM(object):
         result = tf.multiply(self.initial_prob, obs_prob)
         return result
 
+    def decode_op(self):
+        transitions = tf.matmul(self.viterbi, tf.transpose(self.get_emission(self.obs_idx)))
+        weighted_transitions = transitions * self.trans_prob
+        viterbi = tf.reduce_max(weighted_transitions, 0)
+        result = tf.reshape(viterbi, tf.shape(self.viterbi))
+        return result
+
     def forward_op(self):
         transitions = tf.matmul(self.fwd, tf.transpose(self.get_emission(self.obs_idx)))
         weighted_transitions = transitions * self.trans_prob
@@ -68,7 +75,7 @@ if __name__ == '__main__':
     observations = [0, 1, 1, 2, 1]
     with tf.Session() as session:
         prob = forward_algorithm(session, model, observations)
-        logger.debug('probability of observing %s is %.4f' % (observations, prob))
+        logger.debug('probability of observing %s is %.3f%%' % (observations, 100.0 * prob))
 
     logger.debug('done')
     finish_time = time.time()
