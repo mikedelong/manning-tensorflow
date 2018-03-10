@@ -48,23 +48,10 @@ class HMM(object):
         result = tf.reshape(fwd, tf.shape(self.fwd))
         return result
 
-    def backopt_op(self):
+    def backpt_op(self):
         back_transitions = tf.matmul(self.viterbi, np.ones((1, self.N)))
         weighted_back_transitions = back_transitions * self.trans_prob
         result = tf.argmax(weighted_back_transitions, 0)
-        return result
-
-    def viterbi_decode(self, session, model, observations):
-        viterbi = session.run(model.forward_init_op(), feed_dict={model.obs: observations[0]})
-        backpts = np.ones((model.N, len(observations)), 'int32') * -1.0
-        for t in range(1, len(observations)):
-            viterbi, backpts = session.run([model.decode_op(), model.backopt_op()],
-                                           feed_dict={model.obs: observations[t], model.viterbi: viterbi})
-            backpts[:, t] = backpts
-        tokens = [viterbi[:, -1].argmax()]
-        for i in range(len(observations) - 1, 0, -1):
-            tokens.append(backpts[[-1], i])
-        result = tokens[::-1]
         return result
 
 
@@ -75,6 +62,19 @@ def forward_algorithm(session, model, observations):
         result = session.run(tf.reduce_sum(fwd))
         return result
 
+
+def viterbi_decode(sess, hmm, observations):
+    viterbi = sess.run(hmm.forward_init_op(), feed_dict={hmm.obs_idx: observations[0]})
+    backpts = np.ones((hmm.N, len(observations)), 'int32') * -1
+    for t in range(1, len(observations)):
+        viterbi, backpt = sess.run([hmm.decode_op(), hmm.backpt_op()],
+                                   feed_dict={hmm.obs_idx: observations[t],
+                                              hmm.viterbi: viterbi})
+        backpts[:, t] = backpt
+    tokens = [viterbi[:, -1].argmax()]
+    for i in range(len(observations) - 1, 0, -1):
+        tokens.append(backpts[tokens[-1], i])
+    return tokens[::-1]
 
 if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
@@ -95,6 +95,8 @@ if __name__ == '__main__':
     with tf.Session() as session:
         prob = forward_algorithm(session, model, observations)
         logger.debug('probability of observing %s is %.3f%%' % (observations, 100.0 * prob))
+        sequence = viterbi_decode(session, model, observations)
+        logger.debug('most likely hidden states are %s' % sequence)
 
     logger.debug('done')
     finish_time = time.time()
