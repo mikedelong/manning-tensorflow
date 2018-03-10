@@ -33,7 +33,7 @@ class HMM(object):
         result = tf.multiply(self.initial_prob, obs_prob)
         return result
 
-    def foward_op(self):
+    def forward_op(self):
         transitions = tf.matmul(self.fwd, tf.transpose(self.get_emission(self.obs_idx)))
         weighted_transitions = transitions * self.trans_prob
         fwd = tf.reduce_sum(weighted_transitions, 0)
@@ -48,17 +48,29 @@ def forward_algorithm(session, model, observations):
         result = session.run(tf.reduce_sum(fwd))
         return result
 
-formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
-logger = logging.getLogger('main')
-logger.setLevel(logging.DEBUG)
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(formatter)
-logger.addHandler(console_handler)
-console_handler.setLevel(logging.DEBUG)
-logger.debug('started')
 
-logger.debug('done')
-finish_time = time.time()
-elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
-elapsed_minutes, elapsed_seconds = divmod(elapsed_remainder, 60)
-logger.info("Time: {:0>2}:{:0>2}:{:05.2f}".format(int(elapsed_hours), int(elapsed_minutes), elapsed_seconds))
+if __name__ == '__main__':
+    formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
+    logger = logging.getLogger('main')
+    logger.setLevel(logging.DEBUG)
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+    console_handler.setLevel(logging.DEBUG)
+    logger.debug('started')
+
+    initial_prob = np.array([[0.6], [0.4]])
+    trans_prob = np.array([[0.7, 0.3], [0.4, 0.6]])
+    obs_prob = np.array([[0.1, 0.4, 0.5], [0.6, 0.3, 0.1]])
+
+    model = HMM(initial_prob=initial_prob, trans_prob=trans_prob, obs_prob=obs_prob)
+    observations = [0, 1, 1, 2, 1]
+    with tf.Session() as session:
+        prob = forward_algorithm(session, model, observations)
+        logger.debug('probability of observing %s is %.4f' % (observations, prob))
+
+    logger.debug('done')
+    finish_time = time.time()
+    elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
+    elapsed_minutes, elapsed_seconds = divmod(elapsed_remainder, 60)
+    logger.info("Time: {:0>2}:{:0>2}:{:05.2f}".format(int(elapsed_hours), int(elapsed_minutes), elapsed_seconds))
