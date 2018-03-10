@@ -48,6 +48,12 @@ class HMM(object):
         result = tf.reshape(fwd, tf.shape(self.fwd))
         return result
 
+    def backopt_op(self):
+        back_transitions = tf.matmul(self.viterbi, np.ones((1, self.N)))
+        weighted_back_transitions = back_transitions * self.trans_prob
+        result = tf.argmax(weighted_back_transitions, 0)
+        return result
+
 
 def forward_algorithm(session, model, observations):
     fwd = session.run(model.forward_init_op(), feed_dict={model.obs_idx: observations[0]})
