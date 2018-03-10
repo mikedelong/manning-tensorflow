@@ -40,6 +40,14 @@ class HMM(object):
         result = tf.reshape(fwd, tf.shape(self.fwd))
         return result
 
+
+def forward_algorithm(session, model, observations):
+    fwd = session.run(model.forward_init_op(), feed_dict={model.obs_idx: observations[0]})
+    for t in range(1, len(observations)):
+        fwd = session.run(model.forward_op(), feed_dict={model.obs_idx: observations[t], model.fwd: fwd})
+        result = session.run(tf.reduce_sum(fwd))
+        return result
+
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
 logger = logging.getLogger('main')
 logger.setLevel(logging.DEBUG)
