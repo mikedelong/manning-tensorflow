@@ -76,6 +76,7 @@ def viterbi_decode(sess, hmm, observations):
         tokens.append(backpts[tokens[-1], i])
     return tokens[::-1]
 
+
 if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
     logger = logging.getLogger('main')
