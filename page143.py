@@ -33,6 +33,19 @@ class Autoencoder:
         self.training_operation = tf.train.RMSPropOptimizer(self.learning_rate).minimize(self.loss)
         self.saver = tf.train.Saver()
 
+    def train(self, data):
+        num_samples = len(data)
+        with tf.Session() as session:
+            session.run(tf.global_variables_initializer())
+            for index in range(self.epoch):
+                l = None
+                for sample in range(num_samples):
+                    l, _ = session.run([self.loss, self.training_operation], feed_dict={self.x: [data[sample]]})
+                if index % 10 == 0:
+                    logger.debug('epoch: %d, loss = %.4f' % (index, l))
+                    self.saver.save(session, './model.ckpt')
+
+
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
 logger = logging.getLogger('main')
 logger.setLevel(logging.DEBUG)
