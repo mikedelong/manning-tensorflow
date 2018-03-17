@@ -45,6 +45,16 @@ class Autoencoder:
                     logger.debug('epoch: %d, loss = %.4f' % (index, l))
                     self.saver.save(session, './model.ckpt')
 
+    def test(self, data):
+        with tf.Session() as session:
+            self.saver.restore(session, './model.ckpt')
+            hidden, reconstructed = session.run([self.encoded, self.decoded], feed_dict={self.x: data})
+        logger.debug('input : %s' % data)
+        logger.debug('compressed : %s' % hidden)
+        logger.debug('reconstructed : %s' % reconstructed)
+        return reconstructed
+
+
 
 formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
 logger = logging.getLogger('main')
