@@ -2,6 +2,7 @@ import logging
 import time
 
 import tensorflow as tf
+from sklearn import datasets
 
 start_time = time.time()
 
@@ -65,6 +66,13 @@ if __name__ == '__main__':
     logger.addHandler(console_handler)
     console_handler.setLevel(logging.DEBUG)
     logger.debug('started')
+
+    hidden_dim = 1
+    data = datasets.load_iris().data
+    input_dim = len(data[0])
+    auto_encoder = Autoencoder(input_dim, hidden_dim)
+    auto_encoder.train(data)
+    auto_encoder.test([8, 4, 6, 2])
 
     logger.debug('done')
     finish_time = time.time()
