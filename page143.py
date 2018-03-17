@@ -32,6 +32,7 @@ class Autoencoder:
         self.loss = tf.sqrt(tf.reduce_mean(tf.square(tf.subtract(self.x, self.decoded))))
         self.training_operation = tf.train.RMSPropOptimizer(self.learning_rate).minimize(self.loss)
         self.saver = tf.train.Saver()
+        self.model_file = './model.checkpoint'
 
     def train(self, data):
         num_samples = len(data)
@@ -43,11 +44,11 @@ class Autoencoder:
                     l, _ = session.run([self.loss, self.training_operation], feed_dict={self.x: [data[sample]]})
                 if index % 10 == 0:
                     logger.debug('epoch: %d, loss = %.4f' % (index, l))
-                    self.saver.save(session, './model.ckpt')
+                    self.saver.save(session, self.model_file)
 
     def test(self, data):
         with tf.Session() as session:
-            self.saver.restore(session, './model.ckpt')
+            self.saver.restore(session, self.model_file)
             hidden, reconstructed = session.run([self.encoded, self.decoded], feed_dict={self.x: data})
         logger.debug('input : %s' % data)
         logger.debug('compressed : %s' % hidden)
