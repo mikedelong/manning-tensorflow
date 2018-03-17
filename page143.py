@@ -72,7 +72,7 @@ if __name__ == '__main__':
     input_dim = len(data[0])
     auto_encoder = Autoencoder(input_dim, hidden_dim)
     auto_encoder.train(data)
-    auto_encoder.test([8, 4, 6, 2])
+    auto_encoder.test([[8, 4, 6, 2]])
 
     logger.debug('done')
     finish_time = time.time()
