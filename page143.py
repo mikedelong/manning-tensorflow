@@ -67,10 +67,9 @@ if __name__ == '__main__':
     console_handler.setLevel(logging.DEBUG)
     logger.debug('started')
 
-    hidden_dim = 1
     data = datasets.load_iris().data
-    input_dim = len(data[0])
-    auto_encoder = Autoencoder(input_dim, hidden_dim)
+    logger.debug('data shape = %s' % data.shape)
+    auto_encoder = Autoencoder(input_dim=len(data[0]), hidden_dim=1, epoch=300)
     auto_encoder.train(data)
 
     test_data = [[8, 4, 6, 2]]
