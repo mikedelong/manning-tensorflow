@@ -68,7 +68,7 @@ if __name__ == '__main__':
     logger.debug('started')
 
     data = datasets.load_iris().data
-    auto_encoder = Autoencoder(input_dim=data.shape[1], hidden_dim=1, epoch=300)
+    auto_encoder = Autoencoder(input_dim=data.shape[1], hidden_dim=1, epoch=500)
     auto_encoder.train(data, interval=25)
 
     test_data = [[8, 4, 6, 2]]
