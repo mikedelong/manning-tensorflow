@@ -35,7 +35,7 @@ class Autoencoder:
         self.saver = tf.train.Saver()
         self.model_file = './model.checkpoint'
 
-    def train(self, data):
+    def train(self, data, interval=10):
         num_samples = len(data)
         with tf.Session() as session:
             session.run(tf.global_variables_initializer())
@@ -43,7 +43,7 @@ class Autoencoder:
                 l = None
                 for sample in range(num_samples):
                     l, _ = session.run([self.loss, self.training_operation], feed_dict={self.x: [data[sample]]})
-                if index % 10 == 0:
+                if index % interval == 0:
                     logger.debug('epoch: %d, loss = %.4f' % (index, l))
                     self.saver.save(session, self.model_file)
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     data = datasets.load_iris().data
     auto_encoder = Autoencoder(input_dim=data.shape[1], hidden_dim=1, epoch=300)
-    auto_encoder.train(data)
+    auto_encoder.train(data, interval=25)
 
     test_data = [[8, 4, 6, 2]]
     auto_encoder.test(test_data)
