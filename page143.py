@@ -35,26 +35,27 @@ class Autoencoder:
         self.saver = tf.train.Saver()
         self.model_file = './model.checkpoint'
 
-    def train(self, data, interval=10):
-        num_samples = len(data)
+    def train(self, arg_data, interval=10):
+        num_samples = len(arg_data)
         with tf.Session() as session:
             session.run(tf.global_variables_initializer())
             for index in range(self.epoch):
-                l = None
+                current_loss = None
                 for sample in range(num_samples):
-                    l, _ = session.run([self.loss, self.training_operation], feed_dict={self.x: [data[sample]]})
+                    current_loss, _ = session.run([self.loss, self.training_operation],
+                                                  feed_dict={self.x: [arg_data[sample]]})
                 if index % interval == 0:
-                    logger.debug('epoch: %d, loss = %.4f' % (index, l))
+                    logger.debug('epoch: %d, loss = %.4f' % (index, current_loss))
                     self.saver.save(session, self.model_file)
 
-    def test(self, data):
+    def test(self, arg_data):
         with tf.Session() as session:
             self.saver.restore(session, self.model_file)
-            hidden, reconstructed = session.run([self.encoded, self.decoded], feed_dict={self.x: data})
-        logger.debug('input : %s' % data)
+            hidden, result = session.run([self.encoded, self.decoded], feed_dict={self.x: arg_data})
+        logger.debug('input : %s' % arg_data)
         logger.debug('compressed : %s' % hidden)
-        logger.debug('reconstructed : %s' % reconstructed)
-        return reconstructed
+        logger.debug('reconstructed : %s' % result)
+        return result
 
 
 if __name__ == '__main__':
@@ -72,7 +73,7 @@ if __name__ == '__main__':
     auto_encoder.train(data, interval=25)
 
     test_data = [[8, 4, 6, 2]]
-    auto_encoder.test(test_data)
+    auto_encoder.test(arg_data=test_data)
 
     logger.debug('done')
     finish_time = time.time()
