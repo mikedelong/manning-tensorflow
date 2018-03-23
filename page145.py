@@ -1,6 +1,7 @@
 import logging
 import time
 
+import numpy as np
 import tensorflow as tf
 from sklearn import datasets
 
@@ -56,6 +57,12 @@ class Autoencoder:
         logger.debug('compressed : %s' % hidden)
         logger.debug('reconstructed : %s' % result)
         return result
+
+
+def get_batch(arg_data, size):
+    section = np.random.choice(len(arg_data), size, replace=False)
+    result = arg_data[section]
+    return result
 
 
 if __name__ == '__main__':
