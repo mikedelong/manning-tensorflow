@@ -35,16 +35,21 @@ class Autoencoder:
         self.training_operation = tf.train.RMSPropOptimizer(self.learning_rate).minimize(self.loss)
         self.saver = tf.train.Saver()
         self.model_file = './model.checkpoint'
+        self.batch_size = 10
 
-    def train(self, arg_data, interval=10):
+    def train(self, arg_data, batch_size=10, interval=10):
         num_samples = len(arg_data)
+        limit = num_samples // self.batch_size + 1
+
         with tf.Session() as session:
             session.run(tf.global_variables_initializer())
             for index in range(self.epoch):
                 current_loss = None
-                for sample in range(num_samples):
+
+                for sample in range(limit):
+                    batch_data = get_batch(arg_data, self.batch_size)
                     current_loss, _ = session.run([self.loss, self.training_operation],
-                                                  feed_dict={self.x: [arg_data[sample]]})
+                                                  feed_dict={self.x: batch_data})
                 if index % interval == 0:
                     logger.debug('epoch: %d, loss = %.4f' % (index, current_loss))
                     self.saver.save(session, self.model_file)
