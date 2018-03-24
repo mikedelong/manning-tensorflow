@@ -4,6 +4,8 @@ import time
 
 import numpy as np
 
+from page145 import Autoencoder
+
 start_time = time.time()
 
 
@@ -46,6 +48,16 @@ if __name__ == '__main__':
 
     logger.debug('data length: %d, labels length: %d' % (len(data), len(labels)))
     data = grayscale(data)
+    x = np.matrix(data)
+    y = np.array(labels)
+    horse_indices = np.where(y == 7)[0]
+    horse_x = x[horse_indices]
+    logger.debug('We expect the horse object to be 5000 x 3072 and it is %d x %d' % np.shape(horse_x))
+
+    input_dim = np.shape(horse_x)[1]
+    hidden_dim = 100
+    auto_encoder = Autoencoder(input_dim=input_dim, hidden_dim=hidden_dim)
+    auto_encoder.train(horse_x, arg_logger=logger)
 
     logger.debug('done')
     finish_time = time.time()
