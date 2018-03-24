@@ -12,6 +12,7 @@ def unpickle(arg_file):
         result = pickle.load(file_pointer, encoding='latin1')
     return result
 
+
 if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
     logger = logging.getLogger('main')
