@@ -2,9 +2,12 @@ import logging
 import pickle
 import time
 
+import numpy as np
+
 start_time = time.time()
 
 
+# todo use a with clause here
 def unpickle(arg_file):
     file_pointer = open(arg_file, 'rb')
     result = pickle.load(file_pointer, encoding='latin1')
@@ -20,6 +23,24 @@ if __name__ == '__main__':
     logger.addHandler(console_handler)
     console_handler.setLevel(logging.DEBUG)
     logger.debug('started')
+
+    input_folder = './cifar-10-batches-py/'
+    input_file = input_folder + 'batches.meta'
+    names = unpickle(input_file)['label_names']
+    data = list()
+    labels = list()
+    for i in range(1, 6):
+        file_name = input_folder + 'data_batch_' + str(i)
+        logger.debug('processing %s' % file_name)
+        batch_data = unpickle(file_name)
+        if len(data) > 0:
+            data = np.vstack((data, batch_data['data']))
+            labels = np.hstack((labels, batch_data['labels']))
+        else:
+            data = batch_data['data']
+            labels = batch_data['labels']
+
+    logger.debug('data length: %d, labels length: %d' % (len(data), len(labels)))
 
     logger.debug('done')
     finish_time = time.time()
