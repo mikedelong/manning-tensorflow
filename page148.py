@@ -7,6 +7,10 @@ import numpy as np
 start_time = time.time()
 
 
+def grayscale(arg_image):
+    result = arg_image.reshape(arg_image.shape[0], 3, 32, 32).mean(1).reshape(arg_image.shape[0], -1)
+    return result
+
 def unpickle(arg_file):
     with open(arg_file, 'rb') as file_pointer:
         result = pickle.load(file_pointer, encoding='latin1')
