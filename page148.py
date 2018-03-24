@@ -1,7 +1,15 @@
 import logging
+import pickle
 import time
 
 start_time = time.time()
+
+
+def unpickle(arg_file):
+    file_pointer = open(arg_file, 'rb')
+    result = pickle.load(file_pointer, encoding='latin1')
+    file_pointer.close()
+    return result
 
 if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
