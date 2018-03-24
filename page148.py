@@ -7,11 +7,9 @@ import numpy as np
 start_time = time.time()
 
 
-# todo use a with clause here
 def unpickle(arg_file):
-    file_pointer = open(arg_file, 'rb')
-    result = pickle.load(file_pointer, encoding='latin1')
-    file_pointer.close()
+    with open(arg_file, 'rb') as file_pointer:
+        result = pickle.load(file_pointer, encoding='latin1')
     return result
 
 if __name__ == '__main__':
