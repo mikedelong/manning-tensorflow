@@ -37,7 +37,7 @@ class Autoencoder:
         self.model_file = './model.checkpoint'
         self.batch_size = 10
 
-    def train(self, arg_data, batch_size=10, interval=10):
+    def train(self, arg_data, arg_logger, batch_size=10, interval=10):
         num_samples = len(arg_data)
         limit = num_samples // self.batch_size + 1
 
@@ -51,7 +51,7 @@ class Autoencoder:
                     current_loss, _ = session.run([self.loss, self.training_operation],
                                                   feed_dict={self.x: batch_data})
                 if index % interval == 0:
-                    logger.debug('epoch: %d, loss = %.4f' % (index, current_loss))
+                    arg_logger.debug('epoch: %d, loss = %.4f' % (index, current_loss))
                     self.saver.save(session, self.model_file)
 
     def test(self, arg_data):
@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
     data = datasets.load_iris().data
     auto_encoder = Autoencoder(input_dim=data.shape[1], hidden_dim=1, epoch=500)
-    auto_encoder.train(data, interval=25)
+    auto_encoder.train(data, interval=25, arg_logger=logger)
 
     test_data = [[8, 4, 6, 2]]
     auto_encoder.test(arg_data=test_data)
