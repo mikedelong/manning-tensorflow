@@ -11,6 +11,7 @@ def grayscale(arg_image):
     result = arg_image.reshape(arg_image.shape[0], 3, 32, 32).mean(1).reshape(arg_image.shape[0], -1)
     return result
 
+
 def unpickle(arg_file):
     with open(arg_file, 'rb') as file_pointer:
         result = pickle.load(file_pointer, encoding='latin1')
@@ -44,6 +45,7 @@ if __name__ == '__main__':
             labels = batch_data['labels']
 
     logger.debug('data length: %d, labels length: %d' % (len(data), len(labels)))
+    data = grayscale(data)
 
     logger.debug('done')
     finish_time = time.time()
