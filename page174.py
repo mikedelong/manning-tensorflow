@@ -1,6 +1,8 @@
 import logging
 import time
 
+from page148 import unpickle
+
 start_time = time.time()
 
 if __name__ == '__main__':
@@ -12,6 +14,8 @@ if __name__ == '__main__':
     logger.addHandler(console_handler)
     console_handler.setLevel(logging.DEBUG)
     logger.debug('started')
+
+    placeholder = unpickle('./test.pickle')
 
     logger.debug('done')
     finish_time = time.time()
