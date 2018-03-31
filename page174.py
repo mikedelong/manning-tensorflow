@@ -3,7 +3,7 @@ import time
 
 import numpy as np
 
-# from page148 import unpickle
+from page148 import unpickle
 
 start_time = time.time()
 
@@ -21,6 +21,28 @@ def clean(arg_data):
     adjusted_standard_deviations = np.maximum(standard_deviations_t, 1.0 / np.sqrt(image_size))
     normalized = (image_data - means_t) / adjusted_standard_deviations
     return normalized
+
+
+def read_data(arg_folder, arg_logger):
+    names = unpickle('{}/batches.meta'.format(arg_folder))['label_names']
+    arg_logger.debug('names: %s' % names)
+    data = list()
+    labels = list()
+    for index in range(1, 6):
+        file_name = '{}/data_batch_{}'.format(arg_folder, index)
+        batch_data = unpickle(file_name)
+        if len(data) > 0:
+            data = np.vstack((data, batch_data['data']))
+            labels = np.hstack((labels, batch_data['labels']))
+        else:
+            data = batch_data['data']
+            labels = batch_data['labels']
+    arg_logger.debug('data shape : %s labels shape : %s' % (np.shape(data), np.shape(labels)))
+    data = clean(data)
+    data = data.astype(np.float32)
+    return names, data, labels
+
+
 
 if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
