@@ -1,6 +1,8 @@
 import logging
+import random
 import time
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 from page148 import unpickle
@@ -9,7 +11,7 @@ start_time = time.time()
 
 
 def clean(arg_data):
-    images = arg_data.reshape(arg_data.shape[0], 2, 32, 32)
+    images = arg_data.reshape(arg_data.shape[0], 3, 32, 32)
     grayscale_images = images.mean(1)
     cropped_images = grayscale_images[:, 4:28, 4:28]
     image_data = cropped_images.reshape(arg_data.shape[0], -1)
@@ -43,6 +45,16 @@ def read_data(arg_folder, arg_logger):
     return names, data, labels
 
 
+def show_some_names(names, arg_data, labels):
+    plt.figure()
+    rows = 4
+    cols = 4
+    random_indexes = random.sample(range(len(arg_data)), rows * cols)
+    for index in range(rows * cols):
+        plt.subplot(rows, cols, index + 1)
+        j = random_indexes[index]
+        plt.title(names[labels[j]])
+        image = np.reshape(data[j, :], (24, 24))
 
 if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
@@ -54,7 +66,7 @@ if __name__ == '__main__':
     console_handler.setLevel(logging.DEBUG)
     logger.debug('started')
 
-    names, data, labels = read_data('./cifar-10-batches-cy/')
+    names, data, labels = read_data('./cifar-10-batches-py', logger)
 
     logger.debug('done')
     finish_time = time.time()
