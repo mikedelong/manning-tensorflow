@@ -55,6 +55,10 @@ def show_some_examples(arg_names, arg_data, arg_labels):
         j = random_indexes[index]
         plt.title(arg_names[arg_labels[j]])
         image = np.reshape(data[j, :], (24, 24))
+        plt.imshow(image, cmap='Greys_r')
+        plt.axis('off')
+    plt.tight_layout()
+    plt.savefig('./cifar_examples.png')
 
 
 if __name__ == '__main__':
@@ -68,6 +72,7 @@ if __name__ == '__main__':
     logger.debug('started')
 
     names, data, labels = read_data('./cifar-10-batches-py', logger)
+    show_some_examples(arg_names=names, arg_data=data, arg_labels=labels)
 
     logger.debug('done')
     finish_time = time.time()
