@@ -45,7 +45,7 @@ def read_data(arg_folder, arg_logger):
     return names, data, labels
 
 
-def show_some_names(names, arg_data, labels):
+def show_some_examples(arg_names, arg_data, arg_labels):
     plt.figure()
     rows = 4
     cols = 4
@@ -53,8 +53,9 @@ def show_some_names(names, arg_data, labels):
     for index in range(rows * cols):
         plt.subplot(rows, cols, index + 1)
         j = random_indexes[index]
-        plt.title(names[labels[j]])
+        plt.title(arg_names[arg_labels[j]])
         image = np.reshape(data[j, :], (24, 24))
+
 
 if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
