@@ -45,7 +45,7 @@ def read_data(arg_folder, arg_logger):
     return names, data, labels
 
 
-def show_some_examples(arg_names, arg_data, arg_labels):
+def show_some_examples(arg_names, arg_data, arg_labels, arg_output_file):
     plt.figure()
     rows = 4
     cols = 4
@@ -58,7 +58,7 @@ def show_some_examples(arg_names, arg_data, arg_labels):
         plt.imshow(image, cmap='Greys_r')
         plt.axis('off')
     plt.tight_layout()
-    plt.savefig('./cifar_examples.png')
+    plt.savefig(arg_output_file)
 
 
 if __name__ == '__main__':
@@ -72,7 +72,12 @@ if __name__ == '__main__':
     logger.debug('started')
 
     names, data, labels = read_data('./cifar-10-batches-py', logger)
-    show_some_examples(arg_names=names, arg_data=data, arg_labels=labels)
+    output_folder = './output/'
+    output_file = 'cifar_examples.png'
+    full_output_file = output_folder + output_file
+    logger.debug('saving some CIFAR example pictures to %s' % full_output_file)
+
+    show_some_examples(arg_names=names, arg_data=data, arg_labels=labels, arg_output_file=full_output_file)
 
     logger.debug('done')
     finish_time = time.time()
