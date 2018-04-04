@@ -4,6 +4,7 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+import tensorflow as tf
 
 from page148 import unpickle
 
@@ -61,6 +62,22 @@ def show_some_examples(arg_names, arg_data, arg_labels, arg_output_file):
     plt.savefig(arg_output_file)
 
 
+def show_weights(arg_weights, arg_file_name=None):
+    plt.figure()
+    rows = 4
+    columns = 8
+    for index in range(np.shape(arg_weights)[3]):
+        image = arg_weights[:, :, 0, index]
+        plt.subplot(rows, columns, index + 1)
+        plt.imshow(image, cmap='Greys_r', interpolation='none')
+        plt.axis('off')
+    if arg_file_name:
+        plt.savefig(arg_file_name)
+    else:
+        plt.show()
+
+
+
 if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
     logger = logging.getLogger('main')
@@ -78,6 +95,10 @@ if __name__ == '__main__':
     logger.debug('saving some CIFAR example pictures to %s' % full_output_file)
 
     show_some_examples(arg_names=names, arg_data=data, arg_labels=labels, arg_output_file=full_output_file)
+
+    weights = tf.Variable(tf.random_normal([5, 5, 1, 32]))
+
+
 
     logger.debug('done')
     finish_time = time.time()
