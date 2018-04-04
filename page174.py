@@ -27,36 +27,37 @@ def clean(arg_data):
 
 
 def read_data(arg_folder, arg_logger):
-    names = unpickle('{}/batches.meta'.format(arg_folder))['label_names']
-    arg_logger.debug('names: %s' % names)
-    data = list()
-    labels = list()
+    result_names = unpickle('{}/batches.meta'.format(arg_folder))['label_names']
+    arg_logger.debug('names: %s' % result_names)
+    result_data = list()
+    result_labels = list()
     for index in range(1, 6):
         file_name = '{}/data_batch_{}'.format(arg_folder, index)
         batch_data = unpickle(file_name)
-        if len(data) > 0:
-            data = np.vstack((data, batch_data['data']))
-            labels = np.hstack((labels, batch_data['labels']))
+        if len(result_data) > 0:
+            result_data = np.vstack((result_data, batch_data['data']))
+            result_labels = np.hstack((result_labels, batch_data['labels']))
         else:
-            data = batch_data['data']
-            labels = batch_data['labels']
-    arg_logger.debug('data shape : %s labels shape : %s' % (np.shape(data), np.shape(labels)))
-    data = clean(data)
-    data = data.astype(np.float32)
-    return names, data, labels
+            result_data = batch_data['data']
+            result_labels = batch_data['labels']
+    arg_logger.debug('data shape : %s labels shape : %s' % (np.shape(result_data), np.shape(result_labels)))
+    result_data = clean(result_data)
+    result_data = result_data.astype(np.float32)
+    return result_names, result_data, result_labels
 
 
 def show_some_examples(arg_names, arg_data, arg_labels, arg_output_file):
     plt.figure()
     rows = 4
-    cols = 4
-    random_indexes = random.sample(range(len(arg_data)), rows * cols)
-    for index in range(rows * cols):
-        plt.subplot(rows, cols, index + 1)
+    columns = 4
+    random_indexes = random.sample(range(len(arg_data)), rows * columns)
+    color_map = 'Greys_r'
+    for index in range(rows * columns):
+        plt.subplot(rows, columns, index + 1)
         j = random_indexes[index]
         plt.title(arg_names[arg_labels[j]])
         image = np.reshape(data[j, :], (24, 24))
-        plt.imshow(image, cmap='Greys_r')
+        plt.imshow(image, cmap=color_map)
         plt.axis('off')
     plt.tight_layout()
     plt.savefig(arg_output_file)
@@ -66,12 +67,12 @@ def show_weights(arg_weights, arg_file_name=None):
     plt.figure()
     rows = 4
     columns = 8
-    cmap = 'Greys_r'
+    color_map = 'Greys_r'
     interpolation = 'none'
     for index in range(np.shape(arg_weights)[3]):
         image = arg_weights[:, :, 0, index]
         plt.subplot(rows, columns, index + 1)
-        plt.imshow(image, cmap=cmap, interpolation=interpolation)
+        plt.imshow(image, cmap=color_map, interpolation=interpolation)
         plt.axis('off')
     if arg_file_name:
         plt.savefig(arg_file_name)
