@@ -119,6 +119,45 @@ if __name__ == '__main__':
         weights_values = session.run(weights)
         show_weights(weights_values, './output/page174-step-0-weights.png')
 
+    raw_data = data[4, :]
+    raw_image = np.reshape(raw_data, (24, 24))
+    plt.figure()
+    plt.imshow(raw_image, cmap='Greys_r')
+    plt.savefig('./output/page174-input-image.png')
+
+    x = tf.reshape(raw_data, shape=[-1, 24, 24, 1])
+    W = tf.Variable(tf.random_normal([5, 5, 1, 32]))
+    b = tf.Variable(tf.random_normal([32]))
+
+    conv = tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
+    conv_with_b = tf.nn.bias_add(conv, b)
+    conv_out = tf.nn.relu(conv_with_b)
+
+    k = 2
+    maxpool = tf.nn.max_pool(conv_out, ksize=[1, k, k, 1], strides=[1, k, k, 1], padding='SAME')
+
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+
+        W_val = sess.run(W)
+        logger.debug('weights:')
+        show_weights(W_val)
+
+        conv_val = sess.run(conv)
+        logger.debug('convolution results:')
+        logger.debug(np.shape(conv_val))
+        show_conv_results(conv_val)
+
+        conv_out_val = sess.run(conv_out)
+        logger.debug('convolution with bias and relu:')
+        logger.debug(np.shape(conv_out_val))
+        show_conv_results(conv_out_val)
+
+        maxpool_val = sess.run(maxpool)
+        logger.debug('maxpool after all the convolutions:')
+        logger.debug(np.shape(maxpool_val))
+        show_conv_results(maxpool_val)
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
