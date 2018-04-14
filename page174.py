@@ -103,7 +103,7 @@ if __name__ == '__main__':
     with tf.Session() as session:
         session.run(tf.global_variables_initializer())
         weights_values = session.run(weights)
-        show_weights(weights_values, './output/step-0-weights.png')
+        show_weights(weights_values, './output/page174-step-0-weights.png')
 
     logger.debug('done')
     finish_time = time.time()
