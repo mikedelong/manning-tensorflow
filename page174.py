@@ -100,6 +100,11 @@ if __name__ == '__main__':
 
     weights = tf.Variable(tf.random_normal([5, 5, 1, 32]))
 
+    with tf.Session() as session:
+        session.run(tf.global_variables_initializer())
+        weights_values = session.run(weights)
+        show_weights(weights_values, './output/step-0-weights.png')
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
