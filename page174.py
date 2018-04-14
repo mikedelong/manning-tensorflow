@@ -80,6 +80,20 @@ def show_weights(arg_weights, arg_file_name=None):
         plt.show()
 
 
+def show_conv_results(arg_data, arg_file_name=None):
+    plt.figure()
+    rows = 4
+    columns = 8
+    for index in range(np.shape(arg_data)[3]):
+        image = data[0, :, :, index]
+        plt.subplot(rows, columns, index + 1)
+        plt.imshow(image, cmap='Greys_r', interpolation='none')
+        plt.axis('off')
+    if arg_file_name:
+        plt.savefig(arg_file_name)
+    else:
+        plt.show()
+
 if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
     logger = logging.getLogger('main')
