@@ -132,9 +132,9 @@ with tf.Session() as sess:
     show_weights(W_val, full_output_file)
 
     conv_val = sess.run(conv)
-    logger.debug('convolution results: %s' % str(np.shape(conv_val)))
     output_file = 'page174-convolution-results.png'
     full_output_file = output_folder + output_file
+    logger.debug('convolution results: %s saved to %s' % (str(np.shape(conv_val)), full_output_file))
     show_conv_results(conv_val, full_output_file)
 
     conv_out_val = sess.run(conv_out)
