@@ -1,4 +1,5 @@
 import logging
+import random
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -42,6 +43,23 @@ def read_data(arg_folder, arg_logger):
     return result_names, result_data, result_labels
 
 
+def show_some_examples(arg_names, arg_data, arg_labels, arg_output_file):
+    plt.figure()
+    rows = 4
+    columns = 4
+    random_indexes = random.sample(range(len(arg_data)), rows * columns)
+    color_map = 'Greys_r'
+    for index in range(rows * columns):
+        plt.subplot(rows, columns, index + 1)
+        j = random_indexes[index]
+        plt.title(arg_names[arg_labels[j]])
+        image = np.reshape(data[j, :], (24, 24))
+        plt.imshow(image, cmap=color_map)
+        plt.axis('off')
+    plt.tight_layout()
+    plt.savefig(arg_output_file)
+
+
 def show_conv_results(arg_data, arg_file_name=None):
     plt.figure()
     rows = 4
@@ -82,6 +100,12 @@ console_handler.setLevel(logging.DEBUG)
 logger.debug('started')
 
 names, data, labels = read_data('./cifar-10-batches-py', arg_logger=logger)
+output_folder = './output/'
+output_file = 'cifar_examples.png'
+full_output_file = output_folder + output_file
+logger.debug('saving some CIFAR example pictures to %s' % full_output_file)
+
+show_some_examples(arg_names=names, arg_data=data, arg_labels=labels, arg_output_file=full_output_file)
 
 raw_data = data[4, :]
 raw_img = np.reshape(raw_data, (24, 24))
@@ -103,16 +127,24 @@ with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
     W_val = sess.run(W)
-    show_weights(W_val, './output/page174-step-0-weights.png')
+    output_file = 'page174-step-0-weights.png'
+    full_output_file = output_folder + output_file
+    show_weights(W_val, full_output_file)
 
     conv_val = sess.run(conv)
     logger.debug('convolution results: %s' % str(np.shape(conv_val)))
-    show_conv_results(conv_val, './output/page174-convolution-results.png')
+    output_file = 'page174-convolution-results.png'
+    full_output_file = output_folder + output_file
+    show_conv_results(conv_val, full_output_file)
 
     conv_out_val = sess.run(conv_out)
     logger.debug('convolution with bias and relu: %s ' % str(np.shape(conv_out_val)))
-    show_conv_results(conv_out_val, './output/page174-bias-and-relu.png')
+    output_file = 'page174-bias-and-relu.png'
+    full_output_file = output_folder + output_file
+    show_conv_results(conv_out_val, full_output_file)
 
     maxpool_val = sess.run(maxpool)
     logger.debug('maxpool after all the convolutions: %s' % str(np.shape(maxpool_val)))
-    show_conv_results(maxpool_val, './output/page174-maxpool.png')
+    output_file = 'page174-maxpool.png'
+    full_output_file = output_folder + output_file
+    show_conv_results(maxpool_val, full_output_file)
