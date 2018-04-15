@@ -103,16 +103,16 @@ with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
     W_val = sess.run(W)
-    show_weights(W_val)
+    show_weights(W_val, './output/page174-step-0-weights.png')
 
     conv_val = sess.run(conv)
     logger.debug('convolution results: %s' % str(np.shape(conv_val)))
-    show_conv_results(conv_val)
+    show_conv_results(conv_val, './output/page174-convolution-results.png')
 
     conv_out_val = sess.run(conv_out)
     logger.debug('convolution with bias and relu: %s ' % str(np.shape(conv_out_val)))
-    show_conv_results(conv_out_val)
+    show_conv_results(conv_out_val, './output/page174-bias-and-relu.png')
 
     maxpool_val = sess.run(maxpool)
     logger.debug('maxpool after all the convolutions: %s' % str(np.shape(maxpool_val)))
-    show_conv_results(maxpool_val)
+    show_conv_results(maxpool_val, './output/page174-maxpool.png')
