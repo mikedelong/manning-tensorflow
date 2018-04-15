@@ -144,7 +144,7 @@ with tf.Session() as sess:
     show_conv_results(conv_out_val, full_output_file)
 
     maxpool_val = sess.run(maxpool)
-    logger.debug('maxpool after all the convolutions: %s' % str(np.shape(maxpool_val)))
     output_file = 'page174-maxpool.png'
     full_output_file = output_folder + output_file
+    logger.debug('saving maxpool after all the convolutions: %s to %s' % (str(np.shape(maxpool_val)), full_output_file))
     show_conv_results(maxpool_val, full_output_file)
