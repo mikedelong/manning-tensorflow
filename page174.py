@@ -84,7 +84,8 @@ def show_conv_results(arg_data, arg_file_name=None):
     plt.figure()
     rows = 4
     columns = 8
-    for index in range(np.shape(arg_data)[3]):
+    size = np.shape(arg_data)[3]
+    for index in range(size):
         image = data[0, :, :, index]
         plt.subplot(rows, columns, index + 1)
         plt.imshow(image, cmap='Greys_r', interpolation='none')
