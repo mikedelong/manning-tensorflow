@@ -90,61 +90,64 @@ def show_weights(arg_data, filename=None):
         plt.show()
 
 
-formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
-logger = logging.getLogger('main')
-logger.setLevel(logging.DEBUG)
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(formatter)
-logger.addHandler(console_handler)
-console_handler.setLevel(logging.DEBUG)
-logger.debug('started')
+if __name__ == '__main__':
+    formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
+    logger = logging.getLogger('main')
+    logger.setLevel(logging.DEBUG)
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+    console_handler.setLevel(logging.DEBUG)
+    logger.debug('started')
 
-names, data, labels = read_data('./cifar-10-batches-py', arg_logger=logger)
-output_folder = './output/'
-output_file = 'cifar_examples.png'
-full_output_file = output_folder + output_file
-logger.debug('saving some CIFAR example pictures to %s' % full_output_file)
-
-show_some_examples(arg_names=names, arg_data=data, arg_labels=labels, arg_output_file=full_output_file)
-
-raw_data = data[4, :]
-raw_img = np.reshape(raw_data, (24, 24))
-plt.figure()
-plt.imshow(raw_img, cmap='Greys_r')
-
-x = tf.reshape(raw_data, shape=[-1, 24, 24, 1])
-W = tf.Variable(tf.random_normal([5, 5, 1, 32]))
-b = tf.Variable(tf.random_normal([32]))
-
-conv = tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
-conv_with_b = tf.nn.bias_add(conv, b)
-conv_out = tf.nn.relu(conv_with_b)
-
-k = 2
-maxpool = tf.nn.max_pool(conv_out, ksize=[1, k, k, 1], strides=[1, k, k, 1], padding='SAME')
-
-with tf.Session() as sess:
-    sess.run(tf.global_variables_initializer())
-
-    W_val = sess.run(W)
-    output_file = 'page174-step-0-weights.png'
+    names, data, labels = read_data('./cifar-10-batches-py', arg_logger=logger)
+    output_folder = './output/'
+    output_file = 'cifar_examples.png'
     full_output_file = output_folder + output_file
-    show_weights(W_val, full_output_file)
+    logger.debug('saving some CIFAR example pictures to %s' % full_output_file)
 
-    conv_val = sess.run(conv)
-    output_file = 'page174-convolution-results.png'
-    full_output_file = output_folder + output_file
-    logger.debug('saving convolution results: %s to %s' % (str(np.shape(conv_val)), full_output_file))
-    show_conv_results(conv_val, full_output_file)
+    show_some_examples(arg_names=names, arg_data=data, arg_labels=labels, arg_output_file=full_output_file)
 
-    conv_out_val = sess.run(conv_out)
-    output_file = 'page174-bias-and-relu.png'
-    full_output_file = output_folder + output_file
-    logger.debug('saving convolution with bias and relu: %s to %s' % (str(np.shape(conv_out_val)), full_output_file))
-    show_conv_results(conv_out_val, full_output_file)
+    raw_data = data[4, :]
+    raw_img = np.reshape(raw_data, (24, 24))
+    plt.figure()
+    plt.imshow(raw_img, cmap='Greys_r')
 
-    maxpool_val = sess.run(maxpool)
-    output_file = 'page174-maxpool.png'
-    full_output_file = output_folder + output_file
-    logger.debug('saving maxpool after all the convolutions: %s to %s' % (str(np.shape(maxpool_val)), full_output_file))
-    show_conv_results(maxpool_val, full_output_file)
+    x = tf.reshape(raw_data, shape=[-1, 24, 24, 1])
+    W = tf.Variable(tf.random_normal([5, 5, 1, 32]))
+    b = tf.Variable(tf.random_normal([32]))
+
+    conv = tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
+    conv_with_b = tf.nn.bias_add(conv, b)
+    conv_out = tf.nn.relu(conv_with_b)
+
+    k = 2
+    maxpool = tf.nn.max_pool(conv_out, ksize=[1, k, k, 1], strides=[1, k, k, 1], padding='SAME')
+
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+
+        W_val = sess.run(W)
+        output_file = 'page174-step-0-weights.png'
+        full_output_file = output_folder + output_file
+        show_weights(W_val, full_output_file)
+
+        conv_val = sess.run(conv)
+        output_file = 'page174-convolution-results.png'
+        full_output_file = output_folder + output_file
+        logger.debug('saving convolution results: %s to %s' % (str(np.shape(conv_val)), full_output_file))
+        show_conv_results(conv_val, full_output_file)
+
+        conv_out_val = sess.run(conv_out)
+        output_file = 'page174-bias-and-relu.png'
+        full_output_file = output_folder + output_file
+        logger.debug(
+            'saving convolution with bias and relu: %s to %s' % (str(np.shape(conv_out_val)), full_output_file))
+        show_conv_results(conv_out_val, full_output_file)
+
+        maxpool_val = sess.run(maxpool)
+        output_file = 'page174-maxpool.png'
+        full_output_file = output_folder + output_file
+        logger.debug(
+            'saving maxpool after all the convolutions: %s to %s' % (str(np.shape(maxpool_val)), full_output_file))
+        show_conv_results(maxpool_val, full_output_file)
