@@ -3,6 +3,8 @@ import time
 
 import tensorflow as tf
 
+from page174a import read_data
+
 start_time = time.time()
 
 if __name__ == '__main__':
@@ -17,6 +19,10 @@ if __name__ == '__main__':
 
     with tf.Session() as session:
         session.run(tf.global_variables_initializer())
+
+        names, data, labels = read_data('./cifar-10-batches-py', arg_logger=logger)
+        x = tf.placeholder(tf.float32, (None, 2 * 24))
+        y = tf.placeholder(tf.float32, (None, len(names)))
 
     logger.debug('done')
     finish_time = time.time()
