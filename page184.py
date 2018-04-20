@@ -17,12 +17,21 @@ if __name__ == '__main__':
     console_handler.setLevel(logging.DEBUG)
     logger.debug('started')
 
+    names, data, labels = read_data('./cifar-10-batches-py', arg_logger=logger)
+    x = tf.placeholder(tf.float32, (None, 2 * 24))
+    y = tf.placeholder(tf.float32, (None, len(names)))
+    W1 = tf.Variable(tf.random_normal([5, 5, 1, 64]))
+    b1 = tf.Variable(tf.random_normal([64]))
+    W2 = tf.Variable(tf.random_normal([5, 5, 64, 64]))
+    b2 = tf.Variable(tf.random_normal([64]))
+    W3 = tf.Variable(tf.random_normal([6 * 6 * 64, 1024]))
+    b3 = tf.Variable(tf.random_normal([1024]))
+    W_out = tf.Variable(tf.random_normal([1024, len(names)]))
+    b_out = tf.Variable(tf.random_normal([len(names)]))
+
     with tf.Session() as session:
         session.run(tf.global_variables_initializer())
 
-        names, data, labels = read_data('./cifar-10-batches-py', arg_logger=logger)
-        x = tf.placeholder(tf.float32, (None, 2 * 24))
-        y = tf.placeholder(tf.float32, (None, len(names)))
 
     logger.debug('done')
     finish_time = time.time()
