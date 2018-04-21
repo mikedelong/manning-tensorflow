@@ -32,7 +32,6 @@ if __name__ == '__main__':
     with tf.Session() as session:
         session.run(tf.global_variables_initializer())
 
-
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
