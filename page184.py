@@ -8,6 +8,7 @@ from page174a import read_data
 start_time = time.time()
 
 
+# todo try rolling this up into one line
 def conv_layer(arg_x, arg_W, arg_b):
     conv = tf.nn.conv2d(arg_x, arg_W, strides=[1, 1, 1, 1], padding='SAME')
     conv_with_b = tf.nn.bias_add(conv, arg_b)
