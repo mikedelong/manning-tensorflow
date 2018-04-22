@@ -16,6 +16,12 @@ def conv_layer(arg_x, arg_W, arg_b):
     return result
 
 
+def maxpool_layer(arg_conv, arg_k=2):
+    shape = [1, arg_k, arg_k, 1]
+    result = tf.nn.max_pool(arg_conv, ksize=shape, strides=shape, padding='SAME')
+    return result
+
+
 if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
     logger = logging.getLogger('main')
