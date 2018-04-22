@@ -7,6 +7,14 @@ from page174a import read_data
 
 start_time = time.time()
 
+
+def conv_layer(arg_x, arg_W, arg_b):
+    conv = tf.nn.conv2d(arg_x, arg_W, strides=[1, 1, 1, 1], padding='SAME')
+    conv_with_b = tf.nn.bias_add(conv, arg_b)
+    result = tf.nn.relu(conv_with_b)
+    return result
+
+
 if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
     logger = logging.getLogger('main')
