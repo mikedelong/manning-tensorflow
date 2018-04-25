@@ -22,6 +22,7 @@ def maxpool_layer(arg_conv, arg_k=2):
     return result
 
 
+# todo give this function some arguments so we are not grabbing them from file scope
 def model():
     x_reshaped = tf.reshape(x, shape=[-1, 24, 24, 1])
     conv_out1 = conv_layer(x_reshaped, W1, b1)
