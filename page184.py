@@ -60,7 +60,7 @@ if __name__ == '__main__':
     W_out = tf.Variable(tf.random_normal([1024, len(names)]))
     b_out = tf.Variable(tf.random_normal([len(names)]))
     model_op = model()
-    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=model_op, labels=y))
+    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=model_op, labels=y))
     train_op = tf.train.AdamOptimizer(learning_rate=0.001).minimize(cost)
     correct_prediction = tf.equal(tf.argmax(model_op, 1), tf.argmax(y, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
