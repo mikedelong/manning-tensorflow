@@ -71,6 +71,8 @@ if __name__ == '__main__':
         onehot_values = session.run(onehot_labels)
         batch_size = len(data) // 200
         logger.debug('batch size: %d' % batch_size)
+        for epoch_index in range(0, 1000):
+            logger.debug('epoch: %d' % epoch_index)
 
     logger.debug('done')
     finish_time = time.time()
