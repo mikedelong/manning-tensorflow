@@ -68,7 +68,7 @@ if __name__ == '__main__':
     with tf.Session() as session:
         session.run(tf.global_variables_initializer())
         onehot_labels = tf.one_hot(labels, len(names), on_value=1.0, off_value=0.0, axis=-1)
-
+        onehot_values = session.run(onehot_labels)
 
     logger.debug('done')
     finish_time = time.time()
