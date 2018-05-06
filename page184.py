@@ -73,6 +73,13 @@ if __name__ == '__main__':
         logger.debug('batch size: %d' % batch_size)
         for epoch_index in range(0, 1000):
             logger.debug('epoch: %d' % epoch_index)
+            for batch in range(0, len(data), batch_size):
+                batch_data = data[batch:batch + batch_size, :]
+                batch_onehot_values = onehot_values[batch:batch + batch_size, :]
+                _, accuracy_value = session.run([train_op, accuracy], feed_dict={x: batch_data, y: batch_onehot_values})
+                if batch % 1000 == 0:
+                    logger.debug('batch: %d, accuracy: %.4f' % (batch, accuracy_value))
+            logger.debug('done with epoch %d' % epoch_index)
 
     logger.debug('done')
     finish_time = time.time()
