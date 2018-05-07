@@ -49,7 +49,7 @@ if __name__ == '__main__':
     logger.debug('started')
 
     names, data, labels = read_data('./cifar-10-batches-py', arg_logger=logger)
-    x = tf.placeholder(tf.float32, (None, 2 * 24))
+    x = tf.placeholder(tf.float32, (None, 24 * 24))
     y = tf.placeholder(tf.float32, (None, len(names)))
     W1 = tf.Variable(tf.random_normal([5, 5, 1, 64]))
     b1 = tf.Variable(tf.random_normal([64]))
