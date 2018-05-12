@@ -30,6 +30,18 @@ class SeriesPredictor:
         result = tf.squeeze(result)
         return result
 
+    def train(self, train_x, train_y):
+        with tf.Session() as session:
+            tf.get_variable_scope().reuse_variables()
+            session.run(tf.global_variables_initializer())
+            for index in range(1000):
+                feed_dict = {self.x: train_x, self.y: train_y}
+                _, mse = session.run([self.train_op, self.cost], feed_dict=feed_dict)
+                if index % 100 == 0:
+                    logger.debug('train operation iteration %d has mse %.4f' % (index, mse))
+            save_path = self.saver.save(session, 'lstm.ckpt')
+            logger.debug('Model saved to {}'.format(save_path))
+
 if __name__ == '__main__':
     start_time = time.time()
 
