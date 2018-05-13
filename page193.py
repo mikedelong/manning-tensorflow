@@ -39,8 +39,17 @@ class SeriesPredictor:
                 _, mse = session.run([self.train_op, self.cost], feed_dict=feed_dict)
                 if index % 100 == 0:
                     logger.debug('train operation iteration %d has mse %.4f' % (index, mse))
-            save_path = self.saver.save(session, 'lstm.ckpt')
+            save_path = self.saver.save(session, './lstm.ckpt')
             logger.debug('Model saved to {}'.format(save_path))
+
+    def test(self, test_x):
+        with tf.Session() as session:
+            tf.get_variable_scope().reuse_variables()
+            self.saver.restore(session, './lstm.ckpt')
+            feed_dict = {self.x: test_x}
+            result = session.run(self.model(), feed_dict=feed_dict)
+            logger.debug(result)
+
 
 if __name__ == '__main__':
     start_time = time.time()
