@@ -63,7 +63,7 @@ class SeriesPredictor:
             self.saver.restore(session, './lstm.ckpt')
             feed_dict = {self.x: test_x}
             result = session.run(self.model(), feed_dict=feed_dict)
-            logger.debug(result)
+            self.logger.debug(result)
 
 
 if __name__ == '__main__':
