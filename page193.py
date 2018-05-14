@@ -21,6 +21,21 @@ class SeriesPredictor:
 
         self.saver = tf.train.Saver()
 
+        self.formatter = logging.Formatter('%(asctime)s : %(name)s :: %(levelname)s : %(message)s')
+        self.logger = logging.getLogger('SeriesPredictor')
+        self.logger.setLevel(logging.DEBUG)
+        self.console_handler = logging.StreamHandler()
+        self.console_handler.setFormatter(self.formatter)
+        self.logger.addHandler(self.console_handler)
+        self.console_handler.setLevel(logging.DEBUG)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.console_handler.close()
+        self.logger.removeHandler(console_handler)
+
     def model(self):
         cell = rnn.BasicLSTMCell(self.hidden_dim)
         outputs, states = tf.nn.dynamic_rnn(cell, self.x, dtype=tf.float32)
@@ -38,9 +53,9 @@ class SeriesPredictor:
                 feed_dict = {self.x: train_x, self.y: train_y}
                 _, mse = session.run([self.train_op, self.cost], feed_dict=feed_dict)
                 if index % 100 == 0:
-                    logger.debug('train operation iteration %d has mse %.4f' % (index, mse))
+                    self.logger.debug('train operation iteration %d has mse %.4f' % (index, mse))
             save_path = self.saver.save(session, './lstm.ckpt')
-            logger.debug('Model saved to {}'.format(save_path))
+            self.logger.debug('Model saved to {}'.format(save_path))
 
     def test(self, test_x):
         with tf.Session() as session:
