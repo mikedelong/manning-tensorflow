@@ -7,7 +7,7 @@ from tensorflow.contrib import rnn
 
 class SeriesPredictor:
     def __init__(self, input_dim, seq_size, hidden_dim=10):
-        self.ckpt = './lstm.ckpt'
+        self.checkpoint_file = './lstm.ckpt'
         self.input_dim = input_dim
         self.seq_size = seq_size
         self.hidden_dim = hidden_dim
@@ -55,13 +55,13 @@ class SeriesPredictor:
                 _, mse = session.run([self.train_op, self.cost], feed_dict=feed_dict)
                 if index % 100 == 0:
                     self.logger.debug('train operation iteration %d has mse %.4f' % (index, mse))
-            save_path = self.saver.save(session, self.ckpt)
+            save_path = self.saver.save(session, self.checkpoint_file)
             self.logger.debug('Model saved to {}'.format(save_path))
 
     def test(self, test_x):
         with tf.Session() as session:
             tf.get_variable_scope().reuse_variables()
-            self.saver.restore(session, self.ckpt)
+            self.saver.restore(session, self.checkpoint_file)
             feed_dict = {self.x: test_x}
             result = session.run(self.model(), feed_dict=feed_dict)
             self.logger.debug(result)
