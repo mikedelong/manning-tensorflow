@@ -20,6 +20,9 @@ if __name__ == '__main__':
     train_y = [[1, 3, 7, 11], [5, 12, 14, 15], [3, 7, 9, 12]]
     predictor.train(train_x=train_x, train_y=train_y)
 
+    test_x = [[[1], [2], [3], [4]], [[4], [5], [6], [7]]]
+    predictor.test(test_x=test_x)
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
