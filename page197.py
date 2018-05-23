@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     sequence_size = 5
     predictor = SeriesPredictor(input_dim=1, seq_size=sequence_size, hidden_dim=100)
-    data = load_series('international-airline-passengers.csv')
+    data = load_series('./international-airline-passengers.csv', series_idx=1, arg_logger=logger)
     train_data, actual_vals = split_data(data)
 
     logger.debug('done')
