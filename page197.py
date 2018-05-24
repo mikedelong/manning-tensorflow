@@ -1,6 +1,8 @@
 import logging
 import time
 
+import numpy as np
+
 from page195 import SeriesPredictor
 from page196 import load_series
 from page196 import split_data
@@ -21,6 +23,12 @@ if __name__ == '__main__':
     predictor = SeriesPredictor(input_dim=1, seq_size=sequence_size, hidden_dim=100)
     data = load_series('./international-airline-passengers.csv', series_idx=1, arg_logger=logger)
     train_data, actual_vals = split_data(data)
+
+    train_x = list()
+    train_y = list()
+    for i in range(len(train_data) - sequence_size - 1):
+        train_x.append(np.expand_dims(train_data[i:i + sequence_size], axis=1).tolist())
+        train_y.append(train_data[i + 1:i + sequence_size + 1])
 
     logger.debug('done')
     finish_time = time.time()
