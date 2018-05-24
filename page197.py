@@ -31,6 +31,8 @@ if __name__ == '__main__':
               range(len(actual_vals) - sequence_size - 1)]
     test_y = [actual_vals[i + 1:i + sequence_size + 1] for i in range(len(actual_vals) - sequence_size - 1)]
 
+    predictor.train(train_x=train_x, train_y=train_y)
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
