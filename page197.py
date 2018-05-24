@@ -28,6 +28,12 @@ if __name__ == '__main__':
                range(len(train_data) - sequence_size - 1)]
     train_y = [train_data[i + 1:i + sequence_size + 1] for i in range(len(train_data) - sequence_size - 1)]
 
+    test_x = list()
+    test_y = list()
+    for i in range(len(actual_vals) - sequence_size - 1):
+        test_x.append(np.expand_dims(actual_vals[i:i + sequence_size], axis=1).tolist())
+        test_y.append(actual_vals[i + 1:i + sequence_size + 1])
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
