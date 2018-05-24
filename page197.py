@@ -24,11 +24,9 @@ if __name__ == '__main__':
     data = load_series('./international-airline-passengers.csv', series_idx=1, arg_logger=logger)
     train_data, actual_vals = split_data(data)
 
-    train_x = list()
-    train_y = list()
-    for i in range(len(train_data) - sequence_size - 1):
-        train_x.append(np.expand_dims(train_data[i:i + sequence_size], axis=1).tolist())
-        train_y.append(train_data[i + 1:i + sequence_size + 1])
+    train_x = [np.expand_dims(train_data[i:i + sequence_size], axis=1).tolist() for i in
+               range(len(train_data) - sequence_size - 1)]
+    train_y = [train_data[i + 1:i + sequence_size + 1] for i in range(len(train_data) - sequence_size - 1)]
 
     logger.debug('done')
     finish_time = time.time()
