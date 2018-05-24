@@ -18,7 +18,7 @@ def load_series(filename, series_idx, arg_logger):
 
 
 def split_data(data, percent_train=0.8):
-    num_rows = len(data) * percent_train
+    num_rows = int(len(data) * percent_train)
     return data[:num_rows], data[num_rows:]
 
 
