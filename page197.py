@@ -27,12 +27,9 @@ if __name__ == '__main__':
     train_x = [np.expand_dims(train_data[i:i + sequence_size], axis=1).tolist() for i in
                range(len(train_data) - sequence_size - 1)]
     train_y = [train_data[i + 1:i + sequence_size + 1] for i in range(len(train_data) - sequence_size - 1)]
-
-    test_x = list()
-    test_y = list()
-    for i in range(len(actual_vals) - sequence_size - 1):
-        test_x.append(np.expand_dims(actual_vals[i:i + sequence_size], axis=1).tolist())
-        test_y.append(actual_vals[i + 1:i + sequence_size + 1])
+    test_x = [np.expand_dims(actual_vals[i:i + sequence_size], axis=1).tolist() for i in
+              range(len(actual_vals) - sequence_size - 1)]
+    test_y = [actual_vals[i + 1:i + sequence_size + 1] for i in range(len(actual_vals) - sequence_size - 1)]
 
     logger.debug('done')
     finish_time = time.time()
