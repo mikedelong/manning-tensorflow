@@ -58,13 +58,12 @@ class SeriesPredictor:
             save_path = self.saver.save(session, self.checkpoint_file)
             self.logger.debug('Model saved to {}'.format(save_path))
 
-    def test(self, test_x):
-        with tf.Session() as session:
-            tf.get_variable_scope().reuse_variables()
-            self.saver.restore(session, self.checkpoint_file)
-            feed_dict = {self.x: test_x}
-            result = session.run(self.model(), feed_dict=feed_dict)
-            self.logger.debug(result)
+    def test(self, arg_session, test_x):
+        tf.get_variable_scope().reuse_variables()
+        self.saver.restore(arg_session, self.checkpoint_file)
+        feed_dict = {self.x: test_x}
+        result = arg_session.run(self.model(), feed_dict=feed_dict)
+        self.logger.debug(result)
         return result
 
 
