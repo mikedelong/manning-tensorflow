@@ -52,6 +52,7 @@ if __name__ == '__main__':
     with tf.Session() as session:
         predicted_values = predictor.test(test_x=test_x)[:, 0]
         logger.debug('predicted values shape: %s' % np.shape(predicted_values))
+        plot_results(train_data, predicted_values, actual_vals, './output/pate197-predictions.png')
 
     logger.debug('done')
     finish_time = time.time()
