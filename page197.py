@@ -10,10 +10,10 @@ from page196 import load_series
 from page196 import split_data
 
 
-def plot_results(train_x, predictions, actual, filename):
+def plot_results(arg_train_x, predictions, actual, filename):
     plt.figure()
-    num_train = len(train_x)
-    plt.plot(list(range(num_train)), train_x, color='b', label='training data')
+    num_train = len(arg_train_x)
+    plt.plot(list(range(num_train)), arg_train_x, color='b', label='training data')
     plt.plot(list(range(num_train, num_train + len(predictions))), predictions, color='r', label='predicted')
     plt.plot(list(range(num_train, num_train + len(actual))), actual, color='g', label='test data')
     plt.legend()
