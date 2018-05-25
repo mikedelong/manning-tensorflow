@@ -52,7 +52,7 @@ if __name__ == '__main__':
     with tf.Session() as session:
         predicted_values = predictor.test(test_x=test_x)
         t0 = predicted_values[:, 0]
-        logger.debug('predicted values: %s' % str(np.shape(predicted_values)))
+        logger.debug('predicted values shape: %d x %d' % np.shape(predicted_values))
 
     logger.debug('done')
     finish_time = time.time()
