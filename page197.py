@@ -21,6 +21,7 @@ def plot_results(train_x, predictions, actual, filename):
         plt.savefig(filename)
     else:
         plt.show()
+    plt.close()
 
 
 if __name__ == '__main__':
@@ -50,9 +51,17 @@ if __name__ == '__main__':
     predictor.train(train_x=train_x, train_y=train_y)
 
     with tf.Session() as session:
-        predicted_values = predictor.test(test_x=test_x)[:, 0]
+        predicted_values = predictor.test(test_x=test_x, arg_session=session)[:, 0]
         logger.debug('predicted values shape: %s' % np.shape(predicted_values))
-        plot_results(train_data, predicted_values, actual_vals, './output/pate197-predictions.png')
+        plot_results(train_data, predicted_values, actual_vals, './output/page197-predictions.png')
+        previous_sequence = train_x[-1]
+        predicted_values = list()
+        for i in range(20):
+            next_sequence = predictor.test(session, [previous_sequence])
+            predicted_values.append(next_sequence[-1])
+            previous_sequence = np.vstack((previous_sequence[1:], next_sequence[-1]))
+            plot_results(train_data, predicted_values, actual_vals, './output/page197-hallucinations.png')
+
 
     logger.debug('done')
     finish_time = time.time()
