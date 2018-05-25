@@ -1,11 +1,27 @@
 import logging
 import time
 
+import matplotlib.pyplot as plt
 import numpy as np
+import tensorflow as tf
 
 from page195 import SeriesPredictor
 from page196 import load_series
 from page196 import split_data
+
+
+def plot_results(train_x, predictions, actual, filename):
+    plt.figure()
+    num_train = len(train_x)
+    plt.plot(list(range(num_train)), train_x, color='b', label='training data')
+    plt.plot(list(range(num_train, num_train + len(predictions))), predictions, color='r', label='predicted')
+    plt.plot(list(range(num_train, num_train + len(actual))), actual, color='g', label='test data')
+    plt.legend()
+    if filename is not None:
+        plt.savefig(filename)
+    else:
+        plt.show()
+
 
 if __name__ == '__main__':
     start_time = time.time()
@@ -32,6 +48,11 @@ if __name__ == '__main__':
     test_y = [actual_vals[i + 1:i + sequence_size + 1] for i in range(len(actual_vals) - sequence_size - 1)]
 
     predictor.train(train_x=train_x, train_y=train_y)
+
+    with tf.Session() as session:
+        predicted_values = predictor.test(test_x=test_x)
+        t0 = predicted_values[:, 0]
+        logger.debug('predicted values: %s' % str(np.shape(predicted_values)))
 
     logger.debug('done')
     finish_time = time.time()
