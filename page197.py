@@ -62,7 +62,6 @@ if __name__ == '__main__':
             previous_sequence = np.vstack((previous_sequence[1:], next_sequence[-1]))
             plot_results(train_data, predicted_values, actual_vals, './output/page197-hallucinations.png')
 
-
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
