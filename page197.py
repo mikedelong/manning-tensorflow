@@ -50,9 +50,8 @@ if __name__ == '__main__':
     predictor.train(train_x=train_x, train_y=train_y)
 
     with tf.Session() as session:
-        predicted_values = predictor.test(test_x=test_x)
-        t0 = predicted_values[:, 0]
-        logger.debug('predicted values shape: %d x %d' % np.shape(predicted_values))
+        predicted_values = predictor.test(test_x=test_x)[:, 0]
+        logger.debug('predicted values shape: %s' % np.shape(predicted_values))
 
     logger.debug('done')
     finish_time = time.time()
