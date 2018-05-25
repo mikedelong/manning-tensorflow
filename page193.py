@@ -65,6 +65,7 @@ class SeriesPredictor:
             feed_dict = {self.x: test_x}
             result = session.run(self.model(), feed_dict=feed_dict)
             self.logger.debug(result)
+        return result
 
 
 if __name__ == '__main__':
