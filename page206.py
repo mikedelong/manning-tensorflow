@@ -1,6 +1,8 @@
 import logging
 import time
 
+import tensorflow as tf
+
 if __name__ == '__main__':
     start_time = time.time()
 
@@ -12,6 +14,12 @@ if __name__ == '__main__':
     logger.addHandler(console_handler)
     console_handler.setLevel(logging.DEBUG)
     logger.debug('started')
+
+    input_dimension = 1
+    sequence_size = 6
+    shape = [None, sequence_size, input_dimension]
+    input_placeholder = tf.placeholder(dtype=tf.float32, shape=shape)
+
 
     logger.debug('done')
     finish_time = time.time()
