@@ -26,6 +26,10 @@ if __name__ == '__main__':
     shape = [None, sequence_size, input_dimension]
     input_placeholder = tf.placeholder(dtype=tf.float32, shape=shape)
 
+    with tf.variable_scope('first_cell') as scope:
+        cell = make_cell(state_dimension=10)
+        outputs, states = tf.nn.dynamic_rnn(cell, input_placeholder, dtype=tf.float32)
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
