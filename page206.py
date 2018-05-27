@@ -2,6 +2,12 @@ import logging
 import time
 
 import tensorflow as tf
+import tensorflow.contrib.rnn as rnn
+
+
+def make_cell(state_dimension):
+    result = rnn.LSTMCell(state_dimension)
+    return result
 
 if __name__ == '__main__':
     start_time = time.time()
@@ -19,7 +25,6 @@ if __name__ == '__main__':
     sequence_size = 6
     shape = [None, sequence_size, input_dimension]
     input_placeholder = tf.placeholder(dtype=tf.float32, shape=shape)
-
 
     logger.debug('done')
     finish_time = time.time()
