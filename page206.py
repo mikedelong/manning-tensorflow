@@ -16,6 +16,14 @@ def make_multi_cell(state_dimension, number_of_layers):
     return result
 
 
+def extract_character_vocabulary(data):
+    special_symbols = ['<PAD>', '<UNK>', '<GO>', '<EOS>']
+    set_symbols = set([character for line in data for character in line])
+    all_symbols = special_symbols + list(set_symbols)
+    int_to_symbol = {word_i: word for word_i, word in enumerate(all_symbols)}
+    symbol_to_int = {word: word_i for word_i, word in enumerate(all_symbols)}
+    return int_to_symbol, symbol_to_int
+
 if __name__ == '__main__':
     start_time = time.time()
 
