@@ -2,8 +2,15 @@ import logging
 import time
 
 import tensorflow as tf
+import tensorflow.contrib.rnn as rnn
 
 import page206
+
+
+def make_cell(state_dimension):
+    lstm_initializer = tf.random_uniform_initializer(-0.1, 0.1)
+    result = rnn.LSTMCell(state_dimension, initializer=lstm_initializer)
+    return result
 
 if __name__ == '__main__':
     start_time = time.time()
