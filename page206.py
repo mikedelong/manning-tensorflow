@@ -26,9 +26,13 @@ if __name__ == '__main__':
     shape = [None, sequence_size, input_dimension]
     input_placeholder = tf.placeholder(dtype=tf.float32, shape=shape)
 
-    with tf.variable_scope('first_cell') as scope:
-        cell = make_cell(state_dimension=10)
-        outputs, states = tf.nn.dynamic_rnn(cell, input_placeholder, dtype=tf.float32)
+    with tf.variable_scope('first_cell') as scope_1:
+        cell_1 = make_cell(state_dimension=10)
+        outputs_1, states_1 = tf.nn.dynamic_rnn(cell_1, input_placeholder, dtype=tf.float32)
+
+    with tf.variable_scope('second_cell') as scope_2:
+        cell_2 = make_cell(state_dimension=10)
+        outputs_2, states_2 = tf.nn.dynamic_rnn(cell_2, outputs_1, dtype=tf.float32)
 
     logger.debug('done')
     finish_time = time.time()
