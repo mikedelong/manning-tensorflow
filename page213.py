@@ -12,6 +12,12 @@ def make_cell(state_dimension):
     result = rnn.LSTMCell(state_dimension, initializer=lstm_initializer)
     return result
 
+
+def make_multi_cell(state_dimension, number_of_layers):
+    cells = [make_cell(state_dimension=state_dimension) for each in range(number_of_layers)]
+    result = rnn.MultiRNNCell(cells)
+    return result
+
 if __name__ == '__main__':
     start_time = time.time()
 
