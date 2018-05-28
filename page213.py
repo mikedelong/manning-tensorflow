@@ -84,6 +84,17 @@ if __name__ == '__main__':
         training_decoder_output_sequence, _, _ = seq2seq.dynamic_decode(training_decoder, impute_finished=True,
                                                                         maximum_iterations=max_decoder_sequence_length)
 
+    with tf.variable_scope('decode', reuse=True):
+        start_tokens = tf.tile(tf.constant([output_symbol_to_int['<GO>']], dtype=tf.int32), [batch_size],
+                               name='start_tokens')
+        inference_helper = seq2seq.GreedyEmbeddingHelper(embedding=decoder_embedding, start_tokens=start_tokens,
+                                                         end_token=output_symbol_to_int['<EOS>'])
+        inference_decoder = seq2seq.BasicDecoder(decoder_multi_cell, inference_helper, encoder_state, output_layer)
+        inference_decoder_output_sequence, _, _ = seq2seq.dynamic_decode(inference_decoder, impute_finished=True,
+                                                                         maximum_iterations=max_decoder_sequence_length)
+
+
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
