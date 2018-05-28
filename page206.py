@@ -41,6 +41,9 @@ if __name__ == '__main__':
         cell_2 = make_cell(state_dimension=10)
         outputs_2, states_2 = tf.nn.dynamic_rnn(cell_2, outputs_1, dtype=tf.float32)
 
+    multi_cell = make_multi_cell(state_dimension=10, number_of_layers=4)
+    outputs_4, states_4 = tf.nn.dynamic_rnn(multi_cell, input_placeholder, dtype=tf.float32)
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
