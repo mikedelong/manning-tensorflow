@@ -70,6 +70,11 @@ if __name__ == '__main__':
     go_prefixes = tf.fill([batch_size, 1], output_symbol_to_int['<GO>'])
     decoder_input_sequence = tf.concat([go_prefixes, decoder_raw_sequence], 1)
 
+    decoder_embedding = tf.Variable(tf.random_uniform([output_vocabulary_size, decoder_embedding_dimension]))
+    decoder_input_embedded = tf.nn.embedding_lookup(decoder_embedding, decoder_input_sequence)
+    decoder_multi_cell = make_multi_cell(rnn_state_dimension, rnn_layer_count)
+    output_layer_kernel_initializer = tf.truncated_normal_initializer(mean=0.0, stddev=1.0)
+    output_layer = tf.layers.Dense(output_vocabulary_size, kernel_initializer=output_layer_kernel_initializer)
 
     logger.debug('done')
     finish_time = time.time()
