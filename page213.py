@@ -1,6 +1,8 @@
 import logging
 import time
 
+import page206
+
 if __name__ == '__main__':
     start_time = time.time()
 
@@ -12,6 +14,16 @@ if __name__ == '__main__':
     logger.addHandler(console_handler)
     console_handler.setLevel(logging.DEBUG)
     logger.debug('started')
+
+    input_sentences = ['hello stranger', 'bye bye']
+    output_sentences = ['hiya', 'later alligator']
+    input_int_to_symbol, input_symbol_to_int = page206.extract_character_vocabulary(input_sentences)
+    output_int_to_symbol, output_symbol_to_int = page206.extract_character_vocabulary(output_sentences)
+
+    logger.debug(input_int_to_symbol)
+    logger.debug(input_symbol_to_int)
+    logger.debug(output_int_to_symbol)
+    logger.debug(output_symbol_to_int)
 
     logger.debug('done')
     finish_time = time.time()
