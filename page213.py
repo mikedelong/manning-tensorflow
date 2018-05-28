@@ -1,6 +1,8 @@
 import logging
 import time
 
+import tensorflow as tf
+
 import page206
 
 if __name__ == '__main__':
@@ -34,6 +36,12 @@ if __name__ == '__main__':
     learning_rate = 3e-4
     input_vocabulary_size = len(input_symbol_to_int)
     output_vocabulary_size = len(output_symbol_to_int)
+
+    encoder_input_sequence = tf.placeholder(tf.int32, [None, None], name='encoder_input_sequence')
+    encoder_sequence_length = tf.placeholder(tf.int32, (None,), name='encoder_sequence_length')
+    decoder_output_sequence = tf.placeholder(tf.int32, [None, None], name='encoder_output_sequence')
+    decoder_sequence_length = tf.placeholder(tf.int32, (None,), name='decoder_sequence_length')
+    max_decoder_sequence_length = tf.reduce_max(decoder_sequence_length, name='max_decoder_sequence_length')
 
     logger.debug('done')
     finish_time = time.time()
