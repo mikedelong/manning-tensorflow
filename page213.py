@@ -4,6 +4,7 @@ import time
 import tensorflow as tf
 import tensorflow.contrib.layers as layers
 import tensorflow.contrib.rnn as rnn
+import tensorflow.contrib.seq2seq as seq2seq
 
 import page206
 
@@ -75,6 +76,13 @@ if __name__ == '__main__':
     decoder_multi_cell = make_multi_cell(rnn_state_dimension, rnn_layer_count)
     output_layer_kernel_initializer = tf.truncated_normal_initializer(mean=0.0, stddev=1.0)
     output_layer = tf.layers.Dense(output_vocabulary_size, kernel_initializer=output_layer_kernel_initializer)
+
+    with tf.variable_scope('decode'):
+        training_helper = seq2seq.TrainingHelper(inputs=decoder_input_embedded,
+                                                 sequence_length=decoder_sequence_length, time_major=False)
+        training_decoder = seq2seq.BasicDecoder(decoder_multi_cell, training_helper, encoder_state, output_layer)
+        training_decoder_output_sequence, _, _ = seq2seq.dynamic_decode(training_decoder, impute_finished=True,
+                                                                        maximum_iterations=max_decoder_sequence_length)
 
     logger.debug('done')
     finish_time = time.time()
