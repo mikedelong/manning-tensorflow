@@ -35,6 +35,10 @@ def load_sentences(path):
     return data
 
 
+def pad(xs, size, pad):
+    result = xs + [pad] * (size - len(xs))
+    return result
+
 if __name__ == '__main__':
     start_time = time.time()
 
@@ -118,6 +122,37 @@ if __name__ == '__main__':
     gradients = optimizer.compute_gradients(cost)
     capped_gradients = [(tf.clip_by_value(grad, -5.0, 5.0), var) for grad, var in gradients if grad is not None]
     train_operation = optimizer.apply_gradients(capped_gradients)
+
+    input_sequence = [[input_symbol_to_int.get(symbol, input_symbol_to_int['<UNK>']) for symbol in line] for line in
+                      input_sentences]
+    output_sequence = [[output_symbol_to_int.get(symbol, output_symbol_to_int['<UNK>']) for symbol in line] +
+                       [output_symbol_to_int['<EOS>']] for line in output_sentences]
+
+    session = tf.InteractiveSession()
+    session.run(tf.global_variables_initializer())
+    saver = tf.train.Saver()
+
+    for epoch in range(epoch_count + 1):
+        for batch_index in range(len(input_sentences) // batch_size):
+            input_batch, input_lengths, output_batch, output_lengths = [], [], [], []
+            for sentence in input_sentences[batch_index:batch_index + batch_size]:
+                symbol_sent = [input_symbol_to_int[symbol] for symbol in sentence]
+                padded_symbol_sent = pad(symbol_sent, MAX_CHAR_PER_LINE, input_symbol_to_int['<PAD>'])
+                input_batch.append(padded_symbol_sent)
+                input_lengths.append(len(sentence))
+            for sentence in output_sentences[batch_index:batch_index + batch_size]:
+                symbol_sent = [output_symbol_to_int[symbol] for symbol in sentence]
+                padded_symbol_sent = pad(symbol_sent, MAX_CHAR_PER_LINE, output_symbol_to_int['<PAD>'])
+                output_batch.append(padded_symbol_sent)
+                output_lengths.append(len(sentence))
+
+            feed_dict = {encoder_input_sequence: input_batch, encoder_sequence_length: input_lengths,
+                         decoder_output_sequence: output_batch, decoder_sequence_length: output_lengths}
+            _, cost_val = session.run([train_operation, cost], feed_dict=feed_dict)
+            logger.debug('epoch: %d cost: %.4f' % (epoch, cost_val))
+
+    saver.save(session, './page221-model.ckpt')
+    session.close()
 
     logger.debug('done')
     finish_time = time.time()
