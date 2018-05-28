@@ -93,6 +93,11 @@ if __name__ == '__main__':
         inference_decoder_output_sequence, _, _ = seq2seq.dynamic_decode(inference_decoder, impute_finished=True,
                                                                          maximum_iterations=max_decoder_sequence_length)
 
+    training_logits = tf.identity(training_decoder_output_sequence.rnn_output, name='logits')
+    inference_logits = tf.identity(inference_decoder_output_sequence.sample_id, name='predictions')
+    masks = tf.sequence_mask(decoder_sequence_length, max_decoder_sequence_length, dtype=tf.float32, name='masks')
+    cost = seq2seq.sequence_loss(training_logits, decoder_output_sequence, masks)
+
 
 
     logger.debug('done')
