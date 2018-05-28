@@ -98,6 +98,10 @@ if __name__ == '__main__':
     masks = tf.sequence_mask(decoder_sequence_length, max_decoder_sequence_length, dtype=tf.float32, name='masks')
     cost = seq2seq.sequence_loss(training_logits, decoder_output_sequence, masks)
 
+    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
+    gradients = optimizer.compute_gradients(cost)
+    capped_gradients = [(tf.clip_by_value(grad, -5.0, 5.0), var) for grad, var in gradients if grad is not None]
+    train_operation = optimizer.apply_gradients(capped_gradients)
 
 
     logger.debug('done')
