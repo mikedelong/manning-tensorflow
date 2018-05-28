@@ -25,6 +25,16 @@ if __name__ == '__main__':
     logger.debug(output_int_to_symbol)
     logger.debug(output_symbol_to_int)
 
+    epoch_count = 300
+    rnn_state_dimensions = 512
+    rnn_layer_count = 2
+    encoder_embedding_dimension = 64
+    decoder_embedding_dimension = 64
+    batch_size = int(32)
+    learning_rate = 3e-4
+    input_vocabulary_size = len(input_symbol_to_int)
+    output_vocabulary_size = len(output_symbol_to_int)
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
