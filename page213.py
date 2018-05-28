@@ -66,6 +66,11 @@ if __name__ == '__main__':
 
     del encoder_output
 
+    decoder_raw_sequence = decoder_output_sequence[:, :-1]
+    go_prefixes = tf.fill([batch_size, 1], output_symbol_to_int['<GO>'])
+    decoder_input_sequence = tf.concat([go_prefixes, decoder_raw_sequence], 1)
+
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
