@@ -2,6 +2,7 @@ import logging
 import time
 
 import tensorflow as tf
+import tensorflow.contrib.layers as layers
 import tensorflow.contrib.rnn as rnn
 
 import page206
@@ -17,6 +18,7 @@ def make_multi_cell(state_dimension, number_of_layers):
     cells = [make_cell(state_dimension=state_dimension) for each in range(number_of_layers)]
     result = rnn.MultiRNNCell(cells)
     return result
+
 
 if __name__ == '__main__':
     start_time = time.time()
@@ -41,7 +43,7 @@ if __name__ == '__main__':
     logger.debug(output_symbol_to_int)
 
     epoch_count = 300
-    rnn_state_dimensions = 512
+    rnn_state_dimension = 512
     rnn_layer_count = 2
     encoder_embedding_dimension = 64
     decoder_embedding_dimension = 64
@@ -55,6 +57,14 @@ if __name__ == '__main__':
     decoder_output_sequence = tf.placeholder(tf.int32, [None, None], name='encoder_output_sequence')
     decoder_sequence_length = tf.placeholder(tf.int32, (None,), name='decoder_sequence_length')
     max_decoder_sequence_length = tf.reduce_max(decoder_sequence_length, name='max_decoder_sequence_length')
+
+    encoder_input_embedded = layers.embed_sequence(encoder_input_sequence, input_vocabulary_size,
+                                                   encoder_embedding_dimension)
+    encoder_multi_cell = make_multi_cell(rnn_state_dimension, rnn_layer_count)
+    encoder_output, encoder_state = tf.nn.dynamic_rnn(encoder_multi_cell, encoder_input_embedded,
+                                                      sequence_length=encoder_sequence_length, dtype=tf.float32)
+
+    del encoder_output
 
     logger.debug('done')
     finish_time = time.time()
