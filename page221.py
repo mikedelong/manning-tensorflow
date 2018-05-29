@@ -17,7 +17,7 @@ def make_cell(state_dimension):
 
 
 def make_multi_cell(state_dimension, number_of_layers):
-    cells = [make_cell(state_dimension=state_dimension) for each in range(number_of_layers)]
+    cells = [make_cell(state_dimension=state_dimension) for _ in range(number_of_layers)]
     result = rnn.MultiRNNCell(cells)
     return result
 
