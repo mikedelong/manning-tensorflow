@@ -149,7 +149,7 @@ if __name__ == '__main__':
             feed_dict = {encoder_input_sequence: input_batch, encoder_sequence_length: input_lengths,
                          decoder_output_sequence: output_batch, decoder_sequence_length: output_lengths}
             _, cost_val = session.run([train_operation, cost], feed_dict=feed_dict)
-            logger.debug('epoch: %d batch: %d cost: %.4f' % (epoch, batch_index, cost_val))
+            logger.debug('epoch: %d batch: %d cost: %.4e' % (epoch, batch_index, cost_val))
 
     saver.save(session, './page221-model.ckpt')
     session.close()
