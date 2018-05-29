@@ -35,9 +35,10 @@ def load_sentences(path):
     return data
 
 
-def pad(xs, size, pad):
-    result = xs + [pad] * (size - len(xs))
+def pad(xs, size, arg_padding_symbol):
+    result = xs + [arg_padding_symbol] * (size - len(xs))
     return result
+
 
 if __name__ == '__main__':
     start_time = time.time()
