@@ -13,8 +13,11 @@ if __name__ == '__main__':
     console_handler.setLevel(logging.DEBUG)
     logger.debug('started')
 
-    user_input = input('> ')
-    logger.debug('user input is [%s]' % user_input)
+    user_input = None
+    done_tags = ['done']
+    while user_input not in done_tags:
+        user_input = input('> ')
+        logger.debug('user input is [%s]' % user_input)
 
     logger.debug('done')
     finish_time = time.time()
