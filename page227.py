@@ -3,7 +3,7 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
-
+import tensorflow as tf
 
 def get_data(arg_feature_count, arg_output_file=None):
     result_a = np.random.rand(10, arg_feature_count) + 1
@@ -15,6 +15,7 @@ def get_data(arg_feature_count, arg_output_file=None):
     else:
         plt.savefig(arg_output_file)
     return result_a, result_b
+
 
 if __name__ == '__main__':
     start_time = time.time()
@@ -34,6 +35,11 @@ if __name__ == '__main__':
     scatter_plot_file = './output/page227-scatter.png'
     logger.debug('writing scatter plot to %s' % scatter_plot_file)
     data_a, data_b = get_data(arg_feature_count=feature_count, arg_output_file=scatter_plot_file)
+
+    with tf.name_scope('input'):
+        x1 = tf.placeholder(tf.float32, [None, feature_count], name='x1')
+        x2 = tf.placeholder(tf.float32, [None, feature_count], name='x2')
+        dropout_keep_probability = tf.placeholder(tf.float32, name='dropout_probability')
 
     logger.debug('done')
     finish_time = time.time()
