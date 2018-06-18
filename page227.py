@@ -56,6 +56,15 @@ if __name__ == '__main__':
             h2 = tf.nn.dropout(tf.nn.relu(tf.matmul(x2, w1) + b1), keep_prob=dropout_keep_probability)
             tf.summary.histogram('h2', h2)
 
+    with tf.name_scope('output_layer'):
+        with tf.name_scope('output_layer'):
+            w2 = tf.Variable(tf.random_normal([hidden_count, 1]), name='w2')
+            tf.summary.histogram('w2', w2)
+            b2 = tf.Variable(tf.random_normal([1]), name='b2')
+            tf.summary.histogram('b2', b2)
+        with tf.name_scope('output'):
+            s1 = tf.matmul(h1, w2) + b2
+            s2 = tf.matmul(h2, w2) + b2
 
     logger.debug('done')
     finish_time = time.time()
