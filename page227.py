@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 
+
 def get_data(arg_feature_count, arg_output_file=None):
     result_a = np.random.rand(10, arg_feature_count) + 1
     result_b = np.random.rand(10, arg_feature_count)
@@ -30,6 +31,7 @@ if __name__ == '__main__':
     logger.debug('started')
 
     feature_count = 2
+    hidden_count = 10
     random_seed = 1
     np.random.seed(random_seed)
     scatter_plot_file = './output/page227-scatter.png'
@@ -40,6 +42,20 @@ if __name__ == '__main__':
         x1 = tf.placeholder(tf.float32, [None, feature_count], name='x1')
         x2 = tf.placeholder(tf.float32, [None, feature_count], name='x2')
         dropout_keep_probability = tf.placeholder(tf.float32, name='dropout_probability')
+
+    with tf.name_scope('hidden_layer'):
+        with tf.name_scope('weights'):
+            w1 = tf.Variable(tf.random_normal([feature_count, hidden_count]), name='w1')
+            tf.summary.histogram('w1', w1)
+            b1 = tf.Variable(tf.random_normal([hidden_count]), name='b1')
+            tf.summary.histogram('b1', b1)
+
+        with tf.name_scope('output'):
+            h1 = tf.nn.dropout(tf.nn.relu(tf.matmul(x1, w1) + b1), keep_prob=dropout_keep_probability)
+            tf.summary.histogram('h1', h1)
+            h2 = tf.nn.dropout(tf.nn.relu(tf.matmul(x2, w1) + b1), keep_prob=dropout_keep_probability)
+            tf.summary.histogram('h2', h2)
+
 
     logger.debug('done')
     finish_time = time.time()
