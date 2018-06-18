@@ -81,6 +81,15 @@ if __name__ == '__main__':
     initializer = tf.global_variables_initializer()
     session.run(initializer)
 
+    epoch_count = 10000
+    for epoch in range(0, epoch_count):
+        loss_value, _ = session.run([loss, train_op],
+                                    feed_dict={x1: data_a, x2: data_b, dropout_keep_probability: 0.5})
+        if epoch % 100 == 0:
+            summary_result = session.run(summary_operation,
+                                         feed_dict={x1: data_a, x2: data_b, dropout_keep_probability: 1.0})
+            writer.add_summary(summary_result, epoch)
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
