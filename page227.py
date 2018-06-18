@@ -24,6 +24,7 @@ def visualize_results(arg_data_test, arg_session, arg_s1, arg_size):
     scores_image = np.reshape(scores_test, [arg_size, arg_size])
     plt.imshow(scores_image, origin='lower')
     plt.colorbar()
+    plt.savefig('./output/page227-scores.png')
 
 
 if __name__ == '__main__':
@@ -98,13 +99,8 @@ if __name__ == '__main__':
                                          feed_dict={x1: data_a, x2: data_b, dropout_keep_probability: 1.0})
             writer.add_summary(summary_result, epoch)
 
-    # todo use a comprehension here
     grid_size = 10
-    data_test = []
-    for y in np.linspace(0.0, 1.0, num=grid_size):
-        for x in np.linspace(0.0, 1.0, num=grid_size):
-            data_test.append([x, y])
-
+    data_test = [[x, y] for y in np.linspace(0.0, 1.0, num=grid_size) for x in np.linspace(0.0, 1.0, num=grid_size)]
     visualize_results(data_test, arg_session=session, arg_s1=s1, arg_size=grid_size)
 
     logger.debug('done')
