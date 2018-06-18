@@ -69,7 +69,7 @@ if __name__ == '__main__':
     with tf.name_scope('loss'):
         s12 = s1 - s2
         s12_flat = tf.reshape(s12, [-1])
-        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.zeros_like(s12_flat), logits=s12_flat + 1)
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(labels=tf.zeros_like(s12_flat), logits=s12_flat + 1)
         loss = tf.reduce_mean(cross_entropy)
 
     with tf.name_scope('train_op'):
