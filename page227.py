@@ -75,6 +75,12 @@ if __name__ == '__main__':
     with tf.name_scope('train_op'):
         train_op = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
 
+    session = tf.InteractiveSession()
+    summary_operation = tf.summary.merge_all()
+    writer = tf.summary.FileWriter('tb_files', session.graph)
+    initializer = tf.global_variables_initializer()
+    session.run(initializer)
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
