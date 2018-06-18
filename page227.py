@@ -90,6 +90,13 @@ if __name__ == '__main__':
                                          feed_dict={x1: data_a, x2: data_b, dropout_keep_probability: 1.0})
             writer.add_summary(summary_result, epoch)
 
+    # todo use a comprehension here
+    grid_size = 10
+    data_test = []
+    for y in np.linspace(0.0, 1.0, num=grid_size):
+        for x in np.linspace(0.0, 1.0, num=grid_size):
+            data_test.append([x, y])
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
