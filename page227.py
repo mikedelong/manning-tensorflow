@@ -18,6 +18,14 @@ def get_data(arg_feature_count, arg_output_file=None):
     return result_a, result_b
 
 
+def visualize_results(arg_data_test, arg_session, arg_s1, arg_size):
+    plt.figure()
+    scores_test = arg_session.run(arg_s1, feed_dict={x1: arg_data_test, dropout_keep_probability: 1.0})
+    scores_image = np.reshape(scores_test, [arg_size, arg_size])
+    plt.imshow(scores_image, origin='lower')
+    plt.colorbar()
+
+
 if __name__ == '__main__':
     start_time = time.time()
 
@@ -96,6 +104,8 @@ if __name__ == '__main__':
     for y in np.linspace(0.0, 1.0, num=grid_size):
         for x in np.linspace(0.0, 1.0, num=grid_size):
             data_test.append([x, y])
+
+    visualize_results(data_test, arg_session=session, arg_s1=s1, arg_size=grid_size)
 
     logger.debug('done')
     finish_time = time.time()
