@@ -66,6 +66,15 @@ if __name__ == '__main__':
             s1 = tf.matmul(h1, w2) + b2
             s2 = tf.matmul(h2, w2) + b2
 
+    with tf.name_scope('loss'):
+        s12 = s1 - s2
+        s12_flat = tf.reshape(s12, [-1])
+        cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=tf.zeros_like(s12_flat), logits=s12_flat + 1)
+        loss = tf.reduce_mean(cross_entropy)
+
+    with tf.name_scope('train_op'):
+        train_op = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
