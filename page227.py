@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
     session = tf.InteractiveSession()
     summary_operation = tf.summary.merge_all()
-    writer = tf.summary.FileWriter('tb_files', session.graph)
+    writer = tf.summary.FileWriter('tensorboard_files', session.graph)
     initializer = tf.global_variables_initializer()
     session.run(initializer)
 
