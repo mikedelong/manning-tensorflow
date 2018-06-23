@@ -13,10 +13,10 @@ NUM_VIDS = 45
 
 def get_image_pair(video_id):
     image_files = sorted(glob.glob(os.path.join(DATASET_DIR, video_id, '*.png')))
-    start_image = image_files[0]
-    end_image = image_files[-1]
+    first_image = image_files[0]
+    last_image = image_files[-1]
     pair = []
-    for image_file in [start_image, end_image]:
+    for image_file in [first_image, last_image]:
         image_original = imread(image_file)
         image_resized = imresize(image_original, [224, 224])
         pair.append(image_resized)
