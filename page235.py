@@ -5,6 +5,7 @@ import time
 
 import numpy as np
 import tensorflow as tf
+from matplotlib import pyplot as plt
 from scipy.misc import imread
 from scipy.misc import imresize
 
@@ -138,6 +139,12 @@ if __name__ == '__main__':
     images = get_image_sequence('1')
     images_embedded = session.run(vgg.fc1, feed_dict={vgg.imgs: images})
     scores = session.run([s1], feed_dict={x1: images_embedded, dropout_keep_probability: 1.0})
+
+    plt.figure()
+    plt.title('Utility of cloth-folding over time')
+    plt.xlabel('time (video frame #)')
+    plt.ylabel('Utility')
+    plt.plot(scores[-1])
 
     logger.debug('done')
     finish_time = time.time()
