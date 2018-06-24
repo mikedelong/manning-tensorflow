@@ -125,6 +125,20 @@ if __name__ == '__main__':
             logger.debug('Accuracy: {}%'.format(100 * np.mean(s1_value < s2_value)))
 
 
+    # todo move this out of __main__
+    def get_image_sequence(video_id):
+        image_files = sorted(glob.glob(os.path.join(DATASET_DIR, video_id, '*.png')))
+        result = list()
+        # todo use a comprehension?
+        for image_file in image_files:
+            image_original = imread(image_file)
+            image_resized = imresize(image_original, (224, 224))
+            result.append(image_resized)
+        return result
+
+
+    get_image_sequence('1')
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
