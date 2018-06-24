@@ -88,7 +88,6 @@ if __name__ == '__main__':
     with tf.name_scope('train_op'):
         train_operation = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
 
-
     session = tf.InteractiveSession()
     session.run(tf.global_variables_initializer())
     logger.debug('loading VGG16 model')
@@ -124,7 +123,6 @@ if __name__ == '__main__':
                                                                   dropout_keep_probability: 1.0})
             logger.debug('Accuracy: {}%'.format(100 * np.mean(s1_value < s2_value)))
 
-
     # todo move this out of __main__
     def get_image_sequence(video_id):
         image_files = sorted(glob.glob(os.path.join(DATASET_DIR, video_id, '*.png')))
@@ -137,7 +135,9 @@ if __name__ == '__main__':
         return result
 
 
-    get_image_sequence('1')
+    images = get_image_sequence('1')
+    images_embedded = session.run(vgg.fc1, feed_dict={vgg.imgs: images})
+    scores = session.run([s1], feed_dict={x1: images_embedded, dropout_keep_probability: 1.0})
 
     logger.debug('done')
     finish_time = time.time()
