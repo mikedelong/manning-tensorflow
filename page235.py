@@ -44,6 +44,13 @@ if __name__ == '__main__':
     logger.debug('Images of starting state {}'.format(np.shape(start_images)))
     logger.debug('Images of ending state {}'.format(np.shape(end_images)))
 
+    images_placeholder = tf.placeholder(tf.float32, [None, 224, 224, 3])
+    session = tf.InteractiveSession()
+    session.run(tf.global_variables_initializer())
+    logger.debug('loading VGG16 model')
+    vgg = vgg16(images_placeholder, 'vgg16_weights.npz', session)
+    logger.debug('done loading the VGG16 model.')
+
     logger.debug('done')
     finish_time = time.time()
     elapsed_hours, elapsed_remainder = divmod(finish_time - start_time, 3600)
